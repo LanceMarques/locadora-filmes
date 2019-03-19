@@ -32,7 +32,8 @@ public class GeneroService {
 	}
 	
 	public Genero criar(Genero genero) {
-		if(generoRepository.findByNome(genero.getNome()).isPresent()) {
+		Optional<Genero> generoOpt = generoRepository.findByNome(genero.getNome()); 
+		if(generoOpt.isPresent()) {
 			throw new GeneroJaCadastradoException();
 		}
 		return generoRepository.save(genero);

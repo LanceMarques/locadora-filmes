@@ -40,12 +40,12 @@ public class GeneroController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Genero> buscarPorId(@PathVariable int id) {
-		return ResponseEntity.ok(generoService.buscarPorId(id)); 
+	public ResponseEntity<Genero> buscarPorId(@PathVariable("id") int id) {
+		Genero genero = generoService.buscarPorId(id);
+		return ResponseEntity.status(HttpStatus.OK).body(genero);
 	}
 	
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Genero> criar(@Valid @RequestBody Genero genero, HttpServletResponse response) {
 		Genero generoSalvo = generoService.criar(genero);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, generoSalvo.getId()));

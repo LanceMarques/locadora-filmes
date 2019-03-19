@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,9 +19,9 @@ public class Genero {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	//Nao utilizar tipo primitivo, utilizar Integer, Long
-	private int id;
+	private Integer id;
 	
-	@NotNull
+	@NotBlank
 	@Size(min=3,max=50)
 	@Column(name="NOME",unique=true, length=50)
 	private String nome;
