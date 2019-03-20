@@ -17,33 +17,34 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.locadora.handler.Erro;
+import com.locadora.infra.cliente.exceptions.ClienteNaoEncontradoException;
 import com.locadora.infra.cliente.exceptions.CpfJaCadastradoException;
 import com.locadora.infra.genero.exceptions.GeneroJaCadastradoException;
 
 @ControllerAdvice
-public class ClienteExceptionHandler extends ResponseEntityExceptionHandler{
+public class ClienteExceptionHandler{
 
 	@Autowired
 	MessageSource messageSource;
 	
+	@ExceptionHandler({ ClienteNaoEncontradoException.class })
+	public ResponseEntity<Object> handleClienteNaoEncontrado(ClienteNaoEncontradoException ex,
+			WebRequest request) {
+		String mensagemUsr = messageSource.getMessage("cliente.cliente-nao-encontrado", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDev = ex.toString(); 
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erros);
+	}
+	
 	@ExceptionHandler({ CpfJaCadastradoException.class })
 	public ResponseEntity<Object> handleCpfJaCadastrado(CpfJaCadastradoException ex,
 			WebRequest request) {
-		String mensagemUsr = messageSource.getMessage("recurso.cpf-ja-cadastrado", null,
+		String mensagemUsr = messageSource.getMessage("cliente.cpf-ja-cadastrado", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDev = ex.toString(); 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
-		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-	
-	@ExceptionHandler({ ConstraintViolationException.class })
-	public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex,
-			WebRequest request) {
-		String mensagemUsr = messageSource.getMessage("recurso.cpf-invalido", null,
-				LocaleContextHolder.getLocale());
-		String mensagemDev = ex.toString(); 
-		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
-		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
 	}
 	
 }

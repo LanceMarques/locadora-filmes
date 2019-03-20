@@ -45,7 +45,7 @@ public class ClienteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Cliente> criar(@RequestBody Cliente cliente, HttpServletResponse response) {
+	public ResponseEntity<Cliente> criar(@RequestBody @Valid Cliente cliente, HttpServletResponse response) {
 		Cliente clienteSalvo = clienteService.criar(cliente);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, clienteSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);

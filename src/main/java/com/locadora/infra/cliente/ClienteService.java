@@ -30,15 +30,19 @@ public class ClienteService {
 	}
 	
 	public Cliente criar(Cliente cliente) {
-		cliente.setCpf(formatarCpf(cliente.getCpf()));
-		Optional<Cliente> clienteOpt = clienteRepository.findByCpf(cliente.getCpf());
-		if(clienteOpt.isPresent()){
+		Optional<Cliente> clienteOpt = buscarPorCpf(cliente.getCpf());
+		if(clienteOpt.isPresent()) {
 			throw new CpfJaCadastradoException();
 		}
+		cliente.setCpf(formatarCpf(cliente.getCpf()));
 		return clienteRepository.save(cliente);
 	}
 
 	public Cliente atualizar(int id, Cliente cliente) {
+		Optional<Cliente> clienteOpt = buscarPorCpf(cliente.getCpf());
+		if(clienteOpt.isPresent()&&clienteOpt.get().getId()!=id) {
+			throw new CpfJaCadastradoException();
+		}
 		Cliente clienteSalvo = buscarPorId(id);
 		BeanUtils.copyProperties(cliente, clienteSalvo, "id");
 		return clienteSalvo;
@@ -53,12 +57,18 @@ public class ClienteService {
 		//remove simbolos não númericos do CPF
 		String numerosCpf = cpf.replaceAll("\\D", "");
 		//Adiciona simbolos corretamente ao CPF
-		String cpfFormatado = numerosCpf.substring(0,3)+"."+
+		String cpfFormatado = 	numerosCpf.substring(0,3)+"."+
 								numerosCpf.substring(3,6)+"."+
 								numerosCpf.substring(6,9)+"-"+
 								numerosCpf.substring(9,11);
 		System.out.println(cpfFormatado);
 		return cpfFormatado;
 	}
-		
+
+	private Optional<Cliente> buscarPorCpf(String cpf) {
+		cpf = formatarCpf(cpf);
+		Optional<Cliente> clienteOpt = clienteRepository.findByCpf(cpf);
+		return clienteOpt;
+	}
+	
 }
