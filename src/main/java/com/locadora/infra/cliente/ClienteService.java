@@ -8,10 +8,8 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.locadora.infra.cliente.exceptions.ClienteNaoEncontradoException;
 import com.locadora.infra.cliente.exceptions.CpfJaCadastradoException;
-import com.locadora.infra.cliente.exceptions.MesmoNomeCadastradoException;
 
 @Service
 public class ClienteService {
@@ -32,14 +30,12 @@ public class ClienteService {
 	}
 	
 	public Cliente criar(Cliente cliente) {
-		Cliente clienteSalvo = cliente;
-		clienteSalvo.setCpf(formatarCpf(clienteSalvo.getCpf()));
-		
-		Optional<Cliente> clienteOpt = clienteRepository.findByCpf(clienteSalvo.getCpf());
+		cliente.setCpf(formatarCpf(cliente.getCpf()));
+		Optional<Cliente> clienteOpt = clienteRepository.findByCpf(cliente.getCpf());
 		if(clienteOpt.isPresent()){
 			throw new CpfJaCadastradoException();
 		}
-		return clienteRepository.save(clienteSalvo);
+		return clienteRepository.save(cliente);
 	}
 
 	public Cliente atualizar(int id, Cliente cliente) {
@@ -53,6 +49,7 @@ public class ClienteService {
 	}
 	
 	private String formatarCpf(String cpf) {
+		System.out.println(cpf);
 		//remove simbolos não númericos do CPF
 		String numerosCpf = cpf.replaceAll("\\D", "");
 		//Adiciona simbolos corretamente ao CPF
@@ -60,6 +57,7 @@ public class ClienteService {
 								numerosCpf.substring(3,6)+"."+
 								numerosCpf.substring(6,9)+"-"+
 								numerosCpf.substring(9,11);
+		System.out.println(cpfFormatado);
 		return cpfFormatado;
 	}
 		

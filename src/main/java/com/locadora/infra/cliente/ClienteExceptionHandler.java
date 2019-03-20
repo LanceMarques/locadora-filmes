@@ -3,6 +3,8 @@ package com.locadora.infra.cliente;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -28,6 +30,16 @@ public class ClienteExceptionHandler extends ResponseEntityExceptionHandler{
 	public ResponseEntity<Object> handleCpfJaCadastrado(CpfJaCadastradoException ex,
 			WebRequest request) {
 		String mensagemUsr = messageSource.getMessage("recurso.cpf-ja-cadastrado", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDev = ex.toString(); 
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ ConstraintViolationException.class })
+	public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex,
+			WebRequest request) {
+		String mensagemUsr = messageSource.getMessage("recurso.cpf-invalido", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDev = ex.toString(); 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
