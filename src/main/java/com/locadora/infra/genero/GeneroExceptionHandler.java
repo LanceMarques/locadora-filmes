@@ -30,21 +30,21 @@ public class GeneroExceptionHandler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler({ GeneroNaoEncontradoException.class })
 	public ResponseEntity<Object> handleGeneroNaoEncontradoException(GeneroNaoEncontradoException ex,
 			WebRequest request) {
-		String mensagemUsr = messageSource.getMessage("recurso.genero-nao-encontrado", null,
+		String mensagemUsr = messageSource.getMessage("genero.genero-nao-encontrado", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDev = ex.toString(); 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
-		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erros);
 	}
 	
 	@ExceptionHandler({ GeneroJaCadastradoException.class })
 	public ResponseEntity<Object> handleGeneroJaCadastrado(GeneroJaCadastradoException ex,
 			WebRequest request) {
-		String mensagemUsr = messageSource.getMessage("recurso.genero-ja-cadastrado", null,
+		String mensagemUsr = messageSource.getMessage("genero.genero-ja-cadastrado", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDev = ex.toString(); 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
-		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
 	}
 
 }

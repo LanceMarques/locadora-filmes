@@ -32,7 +32,7 @@ public class GeneroService {
 	}
 	
 	public Genero criar(Genero genero) {
-		Optional<Genero> generoOpt = generoRepository.findByNome(genero.getNome()); 
+		Optional<Genero> generoOpt = buscarPorNome(genero.getNome()); 
 		if(generoOpt.isPresent()) {
 			throw new GeneroJaCadastradoException();
 		}
@@ -40,13 +40,21 @@ public class GeneroService {
 	}
 	
 	public Genero atualizar(int id, Genero genero) {
+		Optional<Genero> generoOpt = buscarPorNome(genero.getNome());
+		if(generoOpt.isPresent()&&generoOpt.get().getId()!=id) {
+			throw new GeneroJaCadastradoException();
+		}
 		Genero generoSalvo = buscarPorId(id);			
 		BeanUtils.copyProperties(genero, generoSalvo, "id");
 		return generoRepository.save(generoSalvo);
 	}
 
 	public void excluir(int id) {
-		generoRepository.deleteById(id);
+		Genero genero = buscarPorId(id);
+		generoRepository.deleteById(genero.getId());
 	}
 	
+	private Optional<Genero> buscarPorNome(String nome){
+		return generoRepository.findByNome(nome);
+	}
 }

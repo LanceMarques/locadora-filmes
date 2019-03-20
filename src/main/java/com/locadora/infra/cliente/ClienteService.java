@@ -49,22 +49,22 @@ public class ClienteService {
 	}
 	
 	public void excluir(int id) {
-		clienteRepository.deleteById(id);
+		Cliente cliente =buscarPorId(id);
+		clienteRepository.deleteById(cliente.getId());
 	}
 	
 	private String formatarCpf(String cpf) {
-		System.out.println(cpf);
-		//remove simbolos não númericos do CPF
-		String numerosCpf = cpf.replaceAll("\\D", "");
-		//Adiciona simbolos corretamente ao CPF
-		String cpfFormatado = 	numerosCpf.substring(0,3)+"."+
-								numerosCpf.substring(3,6)+"."+
-								numerosCpf.substring(6,9)+"-"+
-								numerosCpf.substring(9,11);
-		System.out.println(cpfFormatado);
-		return cpfFormatado;
+		if(cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}")) {
+			return cpf;
+		}else {
+			String cpfFormatado = 	cpf.substring(0,3)+"."+
+					cpf.substring(3,6)+"."+
+					cpf.substring(6,9)+"-"+
+					cpf.substring(9,11);
+					return cpfFormatado;
+		}
 	}
-
+	
 	private Optional<Cliente> buscarPorCpf(String cpf) {
 		cpf = formatarCpf(cpf);
 		Optional<Cliente> clienteOpt = clienteRepository.findByCpf(cpf);
