@@ -13,25 +13,37 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
-@Table(name="CLIENTE")
+@Table(name = "CLIENTE")
 public class Cliente {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@NotBlank
 	@CPF
 	@Column(name = "CPF")
 	private String cpf;
-	
+
 	@NotBlank
 	@Size(min = 5, max = 150)
 	@Column(name = "NOME")
 	private String nome;
-	
+
 	@Embedded
 	private Endereco endereco;
+
+	public Cliente() {
+		super();
+	}
+
+	public Cliente(Integer id, String cpf, String nome, Endereco endereco) {
+		super();
+		this.id = id;
+		this.cpf = cpf;
+		this.nome = nome;
+		this.endereco = endereco;
+	}
 
 	public Integer getId() {
 		return id;
@@ -89,7 +101,5 @@ public class Cliente {
 			return false;
 		return true;
 	}
-	
-	
-	
+
 }

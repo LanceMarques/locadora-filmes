@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.locadora.event.RecursoCriadoEvent;
 
 @RestController
@@ -38,7 +36,7 @@ public class ClienteController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> buscarPorId(@PathVariable int id) {
+	public ResponseEntity<Cliente> buscarPorId(@PathVariable("id") int id) {
 		Cliente cliente = clienteService.buscarPorId(id);
 		return ResponseEntity.ok(cliente);
 
@@ -52,16 +50,15 @@ public class ClienteController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Cliente> atualizar(@PathVariable int id, @Valid @RequestBody Cliente cliente) {
+	public ResponseEntity<Cliente> atualizar(@PathVariable("id") int id, @Valid @RequestBody Cliente cliente) {
 		Cliente clienteSalvo = clienteService.atualizar(id, cliente);
 		return ResponseEntity.ok(clienteSalvo);
 	}
-	
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void excluir(@PathVariable int id){
-		 clienteService.excluir(id); 
+	public void excluir(@PathVariable("id") int id) {
+		clienteService.excluir(id);
 	}
-	
+
 }

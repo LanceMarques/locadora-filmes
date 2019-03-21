@@ -21,11 +21,11 @@ import com.locadora.infra.filme.exceptions.FilmeNaoEncontradoException;
 public class FilmeExceptionHandler {
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 	
 	@ExceptionHandler({FilmeNaoEncontradoException.class})
 	public ResponseEntity<Object> handleFilmeNaoEncontradoException(FilmeNaoEncontradoException ex, WebRequest request){
-		String mensagemUsr = messageSource.getMessage("filme.filme-nao-encontrado", null,
+		String mensagemUsr = messageSource.getMessage("filme-nao-encontrado", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDev = ex.toString(); 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
@@ -34,7 +34,7 @@ public class FilmeExceptionHandler {
 	
 	@ExceptionHandler({FilmeJaCadastradoException.class})
 	public ResponseEntity<Object> handleFilmeJaCadastradoException(FilmeJaCadastradoException ex, WebRequest request){
-		String mensagemUsr = messageSource.getMessage("filme.filme-ja-cadastrado", null,
+		String mensagemUsr = messageSource.getMessage("filme-ja-cadastrado", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDev = ex.toString(); 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));

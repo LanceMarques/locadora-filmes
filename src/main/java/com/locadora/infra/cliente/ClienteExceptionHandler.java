@@ -25,11 +25,11 @@ import com.locadora.infra.genero.exceptions.GeneroJaCadastradoException;
 public class ClienteExceptionHandler{
 
 	@Autowired
-	MessageSource messageSource;
+	private MessageSource messageSource;
 	
 	@ExceptionHandler({ ClienteNaoEncontradoException.class })
 	public ResponseEntity<Object> handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {
-		String mensagemUsr = messageSource.getMessage("cliente.cliente-nao-encontrado", null,
+		String mensagemUsr = messageSource.getMessage("cliente-nao-encontrado", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDev = ex.toString(); 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
@@ -38,7 +38,7 @@ public class ClienteExceptionHandler{
 	
 	@ExceptionHandler({ CpfJaCadastradoException.class })
 	public ResponseEntity<Object> handleCpfJaCadastrado(CpfJaCadastradoException ex) {
-		String mensagemUsr = messageSource.getMessage("cliente.cpf-ja-cadastrado", null,
+		String mensagemUsr = messageSource.getMessage("cpf-ja-cadastrado", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDev = ex.toString(); 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));

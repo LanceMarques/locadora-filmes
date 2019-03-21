@@ -2,14 +2,9 @@ package com.locadora.infra.genero;
 
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.locadora.infra.genero.exceptions.GeneroJaCadastradoException;
 import com.locadora.infra.genero.exceptions.GeneroNaoEncontradoException;
 
@@ -23,7 +18,7 @@ public class GeneroService {
 		return generoRepository.findAll();
 	}
 
-	public Genero buscarPorId(int id) {
+	public Genero buscarPorId(Integer id) {
 		Optional<Genero> generoOpt = generoRepository.findById(id);
 		if(!generoOpt.isPresent()) {
 			throw new GeneroNaoEncontradoException();
@@ -32,29 +27,33 @@ public class GeneroService {
 	}
 	
 	public Genero criar(Genero genero) {
-		Optional<Genero> generoOpt = buscarPorNome(genero.getNome()); 
-		if(generoOpt.isPresent()) {
+		Genero generoMesmoNome = buscarPorNome(genero.getNome());
+		if(!generoMesmoNome.equals(null)) {
 			throw new GeneroJaCadastradoException();
 		}
 		return generoRepository.save(genero);
 	}
 
-	public Genero atualizar(int id, Genero genero) {
-		Optional<Genero> generoOpt = buscarPorNome(genero.getNome());
-		if(generoOpt.isPresent()&&generoOpt.get().getId()!=id) {
+	public Genero atualizar(Integer id, Genero genero) {
+		Genero generoMesmoNome = buscarPorNome(genero.getNome());
+		if(!generoMesmoNome.equals(null)&&generoMesmoNome.getId()!=id) {
 			throw new GeneroJaCadastradoException();
 		}
-		Genero generoSalvo = buscarPorId(id);			
+		Genero generoSalvo = buscarPorId(id);		
 		BeanUtils.copyProperties(genero, generoSalvo, "id");
 		return generoRepository.save(generoSalvo);
 	}
 
-	public void excluir(int id) {
+	public void excluir(Integer id) {
 		Genero genero = buscarPorId(id);
 		generoRepository.deleteById(genero.getId());
 	}
 	
-	private Optional<Genero> buscarPorNome(String nome){
-		return generoRepository.findByNome(nome);
+	private Genero buscarPorNome(String nome){
+		Optional<Genero>generoOpt = generoRepository.findByNome(nome);
+		if(!generoOpt.isPresent()) {
+			throw new GeneroNaoEncontradoException();
+		}
+		return generoOpt.get();
 	}
 }

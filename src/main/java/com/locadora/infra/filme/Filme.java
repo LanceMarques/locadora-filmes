@@ -14,41 +14,58 @@ import javax.validation.constraints.NotNull;
 import com.locadora.infra.genero.Genero;
 
 @Entity
-@Table(name= "FILME")
+@Table(name = "FILME")
 public class Filme {
-	
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	private Integer id;
-	
+
 	@NotBlank
-	@Column(name = "TITULO",length = 50)
+	@Column(name = "TITULO", length = 50)
 	private String titulo;
-	
+
 	@NotNull
 	@Column(name = "DURACAO")
 	private int duracao;
-	
+
 	@NotNull
 	@Column(name = "QUANTIDADE_ESTOQUE")
 	private int quantidadeEstoque;
-	
+
 	@NotBlank
 	@Column(name = "SINOPSE")
 	private String sinopse;
-	
+
 	@NotBlank
 	@Column(name = "NOME_DIRETOR", length = 150)
 	private String nomeDiretor;
 
 	@NotNull
-	@Column(name = "VALOR_DIARIA", precision=4, scale=2)
+	@Column(name = "VALOR_DIARIA", precision = 4, scale = 2)
 	private double valorDiaria;
-	
+
 	@NotNull
 	@ManyToOne
-	@JoinColumn(name="GENERO_ID")
+	@JoinColumn(name = "GENERO_ID")
 	private Genero genero;
+
+	public Filme() {
+		super();
+	}
+
+	public Filme(Integer id, String titulo, int duracao, int quantidadeEstoque, String sinopse, String nomeDiretor,
+			double valorDiaria, Genero genero) {
+		super();
+		this.id = id;
+		this.titulo = titulo;
+		this.duracao = duracao;
+		this.quantidadeEstoque = quantidadeEstoque;
+		this.sinopse = sinopse;
+		this.nomeDiretor = nomeDiretor;
+		this.valorDiaria = valorDiaria;
+		this.genero = genero;
+	}
 
 	public Integer getId() {
 		return id;

@@ -22,7 +22,7 @@ public class FilmeService {
 	}
 	
 	public Filme buscarPorId(int id) {
-		Optional<Filme> filmeOpt = filmeRepository.findById(id);
+		final Optional<Filme> filmeOpt = filmeRepository.findById(id);
 		if(!filmeOpt.isPresent()) {
 			throw new FilmeNaoEncontradoException();
 		}
@@ -34,13 +34,13 @@ public class FilmeService {
 	}
 
 	public Filme atualizar(int id, @Valid Filme filme) {
-		Filme filmesalvo = buscarPorId(id);
+		final Filme filmesalvo = buscarPorId(id);
 		BeanUtils.copyProperties(filme, filmesalvo,"id");
 		return filmeRepository.save(filmesalvo);
 	}
 	
 	public void excluir(int id) {
-		Filme filme = buscarPorId(id);
+		final Filme filme = buscarPorId(id);
 		filmeRepository.deleteById(filme.getId());
 	}
 	

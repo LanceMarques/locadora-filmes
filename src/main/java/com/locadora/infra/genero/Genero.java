@@ -6,10 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -18,13 +15,23 @@ public class Genero {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//Nao utilizar tipo primitivo, utilizar Integer, Long
+	// Nao utilizar tipo primitivo, utilizar Integer, Long
 	private Integer id;
-	
+
 	@NotBlank
-	@Size(min=3,max=50)
-	@Column(name="NOME",unique=true, length=50)
+	@Size(min = 3, max = 50)
+	@Column(name = "NOME", unique = true, length = 50)
 	private String nome;
+
+	public Genero() {
+		super();
+	}
+
+	public Genero(Integer id, String nome) {
+		super();
+		this.id = id;
+		this.nome = nome;
+	}
 
 	public Integer getId() {
 		return id;
@@ -66,5 +73,5 @@ public class Genero {
 			return false;
 		return true;
 	}
-	
+
 }
