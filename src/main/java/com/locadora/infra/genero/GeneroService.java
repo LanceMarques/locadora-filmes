@@ -38,7 +38,7 @@ public class GeneroService {
 		}
 		return generoRepository.save(genero);
 	}
-	
+
 	public Genero atualizar(int id, Genero genero) {
 		Optional<Genero> generoOpt = buscarPorNome(genero.getNome());
 		if(generoOpt.isPresent()&&generoOpt.get().getId()!=id) {

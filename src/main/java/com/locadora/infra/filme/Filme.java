@@ -7,10 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.locadora.infra.genero.Genero;
 
@@ -26,11 +25,11 @@ public class Filme {
 	@Column(name = "TITULO",length = 50)
 	private String titulo;
 	
-	@NotBlank
+	@NotNull
 	@Column(name = "DURACAO")
 	private int duracao;
 	
-	@NotBlank
+	@NotNull
 	@Column(name = "QUANTIDADE_ESTOQUE")
 	private int quantidadeEstoque;
 	
@@ -41,14 +40,13 @@ public class Filme {
 	@NotBlank
 	@Column(name = "NOME_DIRETOR", length = 150)
 	private String nomeDiretor;
-		
-	@NotBlank
-	@Digits(integer=4,fraction=2)
-	@Column(name = "VALOR_DIARIA")
+
+	@NotNull
+	@Column(name = "VALOR_DIARIA", precision=4, scale=2)
 	private double valorDiaria;
 	
-	@NotBlank
-	@OneToOne
+	@NotNull
+	@ManyToOne
 	@JoinColumn(name="GENERO_ID")
 	private Genero genero;
 

@@ -49,8 +49,8 @@ public class GeneroController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Genero> atualizar(@PathVariable int id, @Valid @RequestBody Genero genero){
-		Genero generoSalvo = generoService.atualizar(id, genero);
-		return ResponseEntity.status(HttpStatus.OK).body(generoSalvo);
+		Genero generoAtualizado = generoService.atualizar(id, genero);
+		return ResponseEntity.status(HttpStatus.OK).body(generoAtualizado);
 	}
 	
 	@DeleteMapping("/{id}")

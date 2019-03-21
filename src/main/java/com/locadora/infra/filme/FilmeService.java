@@ -3,6 +3,9 @@ package com.locadora.infra.filme;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,7 @@ public class FilmeService {
 		return filmeRepository.findAll();
 	}
 	
-	public Filme BuscarPorId(int id) {
+	public Filme buscarPorId(int id) {
 		Optional<Filme> filmeOpt = filmeRepository.findById(id);
 		if(!filmeOpt.isPresent()) {
 			throw new FilmeNaoEncontradoException();
@@ -28,6 +31,17 @@ public class FilmeService {
 	
 	public Filme criar(Filme filme) {
 		return filmeRepository.save(filme);
+	}
+
+	public Filme atualizar(int id, @Valid Filme filme) {
+		Filme filmesalvo = buscarPorId(id);
+		BeanUtils.copyProperties(filme, filmesalvo,"id");
+		return filmeRepository.save(filmesalvo);
+	}
+	
+	public void excluir(int id) {
+		Filme filme = buscarPorId(id);
+		filmeRepository.deleteById(filme.getId());
 	}
 	
 }
