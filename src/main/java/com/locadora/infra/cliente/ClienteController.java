@@ -1,7 +1,6 @@
 package com.locadora.infra.cliente;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.locadora.event.RecursoCriadoEvent;
 
@@ -32,33 +30,39 @@ public class ClienteController {
 	@GetMapping
 	public ResponseEntity<List<Cliente>> listarTodos() {
 		List<Cliente> clientes = clienteService.listarTodos();
-		return ResponseEntity.ok(clientes);
+		return ResponseEntity.status(HttpStatus.OK).body(clientes);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Cliente> buscarPorId(@PathVariable("id") int id) {
-		Cliente cliente = clienteService.buscarPorId(id);
-		return ResponseEntity.ok(cliente);
+		final Cliente cliente = clienteService.buscarPorId(id);
+		return ResponseEntity.status(HttpStatus.OK).body(cliente);
 
+	}
+
+	@GetMapping("cpf/{cpf}")
+	public ResponseEntity<Cliente> buscarPorCpf(@PathVariable("cpf") String cpf) {
+		final Cliente cliente = clienteService.buscarClientePorCpf(cpf);
+		return ResponseEntity.status(HttpStatus.OK).body(cliente);
 	}
 
 	@PostMapping
 	public ResponseEntity<Cliente> criar(@RequestBody @Valid Cliente cliente, HttpServletResponse response) {
-		Cliente clienteSalvo = clienteService.criar(cliente);
+		final Cliente clienteSalvo = clienteService.criar(cliente);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, clienteSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Cliente> atualizar(@PathVariable("id") int id, @Valid @RequestBody Cliente cliente) {
-		Cliente clienteSalvo = clienteService.atualizar(id, cliente);
+		final Cliente clienteSalvo = clienteService.atualizar(id, cliente);
 		return ResponseEntity.ok(clienteSalvo);
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void excluir(@PathVariable("id") int id) {
+	public ResponseEntity<?> excluir(@PathVariable("id") int id) {
 		clienteService.excluir(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}
 
 }

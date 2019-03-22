@@ -13,33 +13,33 @@ public class GeneroService {
 
 	@Autowired
 	private GeneroRepository generoRepository;
-	
-	public List<Genero> listarTodos(){
+
+	public List<Genero> listarTodos() {
 		return generoRepository.findAll();
 	}
 
 	public Genero buscarPorId(Integer id) {
 		Optional<Genero> generoOpt = generoRepository.findById(id);
-		if(!generoOpt.isPresent()) {
+		if (!generoOpt.isPresent()) {
 			throw new GeneroNaoEncontradoException();
 		}
 		return generoOpt.get();
 	}
-	
+
 	public Genero criar(Genero genero) {
-		Genero generoMesmoNome = buscarPorNome(genero.getNome());
-		if(!generoMesmoNome.equals(null)) {
+		Optional<Genero> generoMesmoNome = buscarPorNome(genero.getNome());
+		if (generoMesmoNome.isPresent()) {
 			throw new GeneroJaCadastradoException();
 		}
 		return generoRepository.save(genero);
 	}
 
 	public Genero atualizar(Integer id, Genero genero) {
-		Genero generoMesmoNome = buscarPorNome(genero.getNome());
-		if(!generoMesmoNome.equals(null)&&generoMesmoNome.getId()!=id) {
+		Genero generoSalvo = buscarPorId(id);
+		Optional<Genero> generoMesmoNome = buscarPorNome(genero.getNome());
+		if (generoMesmoNome.isPresent() && generoMesmoNome.get().getId() != id) {
 			throw new GeneroJaCadastradoException();
 		}
-		Genero generoSalvo = buscarPorId(id);		
 		BeanUtils.copyProperties(genero, generoSalvo, "id");
 		return generoRepository.save(generoSalvo);
 	}
@@ -48,12 +48,9 @@ public class GeneroService {
 		Genero genero = buscarPorId(id);
 		generoRepository.deleteById(genero.getId());
 	}
-	
-	private Genero buscarPorNome(String nome){
-		Optional<Genero>generoOpt = generoRepository.findByNome(nome);
-		if(!generoOpt.isPresent()) {
-			throw new GeneroNaoEncontradoException();
-		}
-		return generoOpt.get();
+
+	private Optional<Genero> buscarPorNome(String nome) {
+		Optional<Genero> generoOpt = generoRepository.findByNome(nome);
+		return generoOpt;
 	}
 }

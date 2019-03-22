@@ -16,16 +16,16 @@ public class Endereco {
 	@NotBlank
 	@Column(name = "CEP", length = 10)
 	private String cep;
-	
+
 	@NotBlank
 	@Size(min = 3, max = 50)
 	@Column(name = "BAIRRO")
 	private String bairro;
-	
+
 	@Size(max = 150)
 	@Column(name = "COMPLEMENTO")
 	private String complemento;
-	
+
 	@NotBlank
 	@Size(min = 3, max = 50)
 	@Column(name = "CIDADE")
@@ -70,7 +70,5 @@ public class Endereco {
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	
-	
-	
+
 }
