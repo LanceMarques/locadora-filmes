@@ -29,12 +29,12 @@ public class ClienteController {
 
 	@GetMapping
 	public ResponseEntity<List<Cliente>> listarTodos() {
-		List<Cliente> clientes = clienteService.listarTodos();
+		final List<Cliente> clientes = clienteService.listarTodos();
 		return ResponseEntity.status(HttpStatus.OK).body(clientes);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> buscarPorId(@PathVariable("id") int id) {
+	public ResponseEntity<Cliente> buscarPorId(@PathVariable("id") Integer id) {
 		final Cliente cliente = clienteService.buscarPorId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(cliente);
 
@@ -54,13 +54,13 @@ public class ClienteController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Cliente> atualizar(@PathVariable("id") int id, @Valid @RequestBody Cliente cliente) {
+	public ResponseEntity<Cliente> atualizar(@PathVariable("id") Integer id, @Valid @RequestBody Cliente cliente) {
 		final Cliente clienteSalvo = clienteService.atualizar(id, cliente);
 		return ResponseEntity.ok(clienteSalvo);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> excluir(@PathVariable("id") int id) {
+	public ResponseEntity<?> excluir(@PathVariable("id") Integer id) {
 		clienteService.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}
