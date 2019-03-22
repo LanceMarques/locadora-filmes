@@ -22,6 +22,8 @@ public class FilmeController {
 	
 	@Autowired
 	private FilmeService filmeService;
+		
+
 	
 	@GetMapping
 	public ResponseEntity<List<Filme>> listarTodos(){
@@ -30,7 +32,7 @@ public class FilmeController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Filme> buscarPorId(@PathVariable("id") int id) {
+	public ResponseEntity<Filme> buscarPorId(@PathVariable("id") Integer id) {
 		final Filme filme = filmeService.buscarPorId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(filme);
 	}
@@ -42,13 +44,13 @@ public class FilmeController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Filme> atualizar(@PathVariable("id") int id, @Valid @RequestBody Filme filme){
+	public ResponseEntity<Filme> atualizar(@PathVariable("id") Integer id, @Valid @RequestBody Filme filme){
 		final Filme filmeAtualizado = filmeService.atualizar(id, filme);
 		return ResponseEntity.status(HttpStatus.OK).body(filmeAtualizado);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Filme> excluir(@PathVariable("id") int id){
+	public ResponseEntity<Filme> excluir(@PathVariable("id") Integer id){
 		filmeService.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}

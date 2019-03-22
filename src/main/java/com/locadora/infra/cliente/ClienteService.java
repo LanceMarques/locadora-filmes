@@ -19,7 +19,7 @@ public class ClienteService {
 	}
 
 	public Cliente buscarPorId(Integer id) {
-		Optional<Cliente> clienteOpt = clienteRepository.findById(id);
+		final Optional<Cliente> clienteOpt = clienteRepository.findById(id);
 		if (!clienteOpt.isPresent()) {
 			throw new ClienteNaoEncontradoException();
 		}
@@ -27,7 +27,7 @@ public class ClienteService {
 	}
 
 	public Cliente criar(Cliente cliente) {
-		Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
+		final Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
 		if (clienteMesmoCpf.isPresent()) {
 			throw new CpfJaCadastradoException();
 		}
@@ -36,8 +36,8 @@ public class ClienteService {
 	}
 
 	public Cliente atualizar(Integer id, Cliente cliente) {
-		Cliente clienteSalvo = buscarPorId(id);
-		Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
+		final Cliente clienteSalvo = buscarPorId(id);
+		final Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
 		if (clienteMesmoCpf.isPresent() && clienteMesmoCpf.get().getId() != id) {
 			throw new CpfJaCadastradoException();
 		}
@@ -47,7 +47,7 @@ public class ClienteService {
 	}
 
 	public void excluir(Integer id) {
-		Cliente cliente = buscarPorId(id);
+		final Cliente cliente = buscarPorId(id);
 		clienteRepository.deleteById(cliente.getId());
 	}
 
@@ -67,7 +67,7 @@ public class ClienteService {
 	}
 
 	public Cliente buscarClientePorCpf(String cpf) {
-		Optional<Cliente> clienteOpt = buscarPorCpf(cpf);
+		final Optional<Cliente> clienteOpt = buscarPorCpf(cpf);
 		if (!clienteOpt.isPresent()) {
 			throw new ClienteNaoEncontradoException();
 		}

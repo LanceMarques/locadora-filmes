@@ -56,7 +56,7 @@ public class ClienteController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Cliente> atualizar(@PathVariable("id") Integer id, @Valid @RequestBody Cliente cliente) {
 		final Cliente clienteSalvo = clienteService.atualizar(id, cliente);
-		return ResponseEntity.ok(clienteSalvo);
+		return ResponseEntity.status(HttpStatus.OK).body(clienteSalvo);
 	}
 
 	@DeleteMapping("/{id}")

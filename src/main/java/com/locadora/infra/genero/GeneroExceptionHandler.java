@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import com.locadora.handler.Erro;
+import com.locadora.infra.genero.exceptions.FilmeAssociadoException;
 import com.locadora.infra.genero.exceptions.GeneroJaCadastradoException;
 import com.locadora.infra.genero.exceptions.GeneroNaoEncontradoException;
 
@@ -32,7 +33,7 @@ public class GeneroExceptionHandler extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler({ GeneroJaCadastradoException.class })
-	public ResponseEntity<Object> handleGeneroJaCadastrado(GeneroJaCadastradoException ex,
+	public ResponseEntity<Object> handleGeneroJaCadastradoException(GeneroJaCadastradoException ex,
 			WebRequest request) {
 		String mensagemUsr = messageSource.getMessage("genero-ja-cadastrado", null,
 				LocaleContextHolder.getLocale());
@@ -41,4 +42,13 @@ public class GeneroExceptionHandler extends ResponseEntityExceptionHandler{
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
 	}
 
+	@ExceptionHandler({ FilmeAssociadoException.class })
+	public ResponseEntity<Object> handleFilmeAssociadoException(FilmeAssociadoException ex,
+			WebRequest request) {
+		String mensagemUsr = messageSource.getMessage("genero.filme-associado", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDev = ex.toString(); 
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
+	}
 }

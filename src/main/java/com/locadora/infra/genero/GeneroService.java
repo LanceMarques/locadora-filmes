@@ -5,6 +5,10 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.locadora.infra.filme.Filme;
+import com.locadora.infra.filme.FilmeService;
+import com.locadora.infra.genero.exceptions.FilmeAssociadoException;
 import com.locadora.infra.genero.exceptions.GeneroJaCadastradoException;
 import com.locadora.infra.genero.exceptions.GeneroNaoEncontradoException;
 
@@ -14,12 +18,15 @@ public class GeneroService {
 	@Autowired
 	private GeneroRepository generoRepository;
 	
+	@Autowired
+	private FilmeService filmeService;
+	
 	public List<Genero> listarTodos() {
 		return generoRepository.findAll();
 	}
 
 	public Genero buscarPorId(Integer id) {
-		Optional<Genero> generoOpt = generoRepository.findById(id);
+		final Optional<Genero> generoOpt = generoRepository.findById(id);
 		if (!generoOpt.isPresent()) {
 			throw new GeneroNaoEncontradoException();
 		}
@@ -27,7 +34,7 @@ public class GeneroService {
 	}
 
 	public Genero criar(Genero genero) {
-		Optional<Genero> generoMesmoNome = buscarPorNome(genero.getNome());
+		final Optional<Genero> generoMesmoNome = buscarPorNome(genero.getNome());
 		if (generoMesmoNome.isPresent()) {
 			throw new GeneroJaCadastradoException();
 		}
@@ -35,8 +42,8 @@ public class GeneroService {
 	}
 
 	public Genero atualizar(Integer id, Genero genero) {
-		Genero generoSalvo = buscarPorId(id);
-		Optional<Genero> generoMesmoNome = buscarPorNome(genero.getNome());
+		final Genero generoSalvo = buscarPorId(id);
+		final Optional<Genero> generoMesmoNome = buscarPorNome(genero.getNome());
 		if (generoMesmoNome.isPresent() && generoMesmoNome.get().getId() != id) {
 			throw new GeneroJaCadastradoException();
 		}
@@ -45,12 +52,15 @@ public class GeneroService {
 	}
 
 	public void excluir(Integer id) {
-		Genero genero = buscarPorId(id);
+		final Genero genero = buscarPorId(id);
+		List<Filme> filmesAssociados = filmeService.findByGenero(genero);
+		if(filmesAssociados.isEmpty()) {
 		generoRepository.deleteById(genero.getId());
+		}else throw new FilmeAssociadoException();
 	}
 
 	private Optional<Genero> buscarPorNome(String nome) {
-		Optional<Genero> generoOpt = generoRepository.findByNome(nome);
+		final Optional<Genero> generoOpt = generoRepository.findByNome(nome);
 		return generoOpt;
 	}
 }
