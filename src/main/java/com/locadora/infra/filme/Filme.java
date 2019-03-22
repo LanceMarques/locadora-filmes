@@ -8,8 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.locadora.infra.genero.Genero;
 
@@ -30,18 +32,22 @@ public class Filme {
 	private int duracao;
 
 	@NotNull
+	@Min(value = 0)
 	@Column(name = "QUANTIDADE_ESTOQUE")
 	private int quantidadeEstoque;
 
 	@NotBlank
+	@Size(min=5)
 	@Column(name = "SINOPSE")
 	private String sinopse;
 
 	@NotBlank
+	@Size(min=5)
 	@Column(name = "NOME_DIRETOR", length = 150)
 	private String nomeDiretor;
 
 	@NotNull
+	@Min(value = 0)
 	@Column(name = "VALOR_DIARIA", precision = 4, scale = 2)
 	private double valorDiaria;
 

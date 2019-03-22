@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.locadora.infra.filme.Filme;
 import com.locadora.infra.filme.FilmeService;
 import com.locadora.infra.genero.exceptions.FilmeAssociadoException;
@@ -53,7 +52,7 @@ public class GeneroService {
 
 	public void excluir(Integer id) {
 		final Genero genero = buscarPorId(id);
-		List<Filme> filmesAssociados = filmeService.findByGenero(genero);
+		List<Filme> filmesAssociados = filmeService.buscarPorGenero(genero);
 		if(filmesAssociados.isEmpty()) {
 		generoRepository.deleteById(genero.getId());
 		}else throw new FilmeAssociadoException();

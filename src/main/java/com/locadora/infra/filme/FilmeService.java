@@ -2,13 +2,9 @@ package com.locadora.infra.filme;
 
 import java.util.List;
 import java.util.Optional;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.locadora.infra.filme.exceptions.FilmeNaoEncontradoException;
 import com.locadora.infra.genero.Genero;
 
@@ -30,11 +26,15 @@ public class FilmeService {
 		return filmeOpt.get();
 	}
 	
+	public List<Filme> buscarPorGenero(Genero genero) {
+		return filmeRepository.findByGenero(genero);
+	}
+	
 	public Filme criar(Filme filme) {
 		return filmeRepository.save(filme);
 	}
 
-	public Filme atualizar(Integer id, @Valid Filme filme) {
+	public Filme atualizar(Integer id, Filme filme) {
 		final Filme filmesalvo = buscarPorId(id);
 		BeanUtils.copyProperties(filme, filmesalvo,"id");
 		return filmeRepository.save(filmesalvo);
@@ -43,10 +43,6 @@ public class FilmeService {
 	public void excluir(Integer id) {
 		final Filme filme = buscarPorId(id);
 		filmeRepository.deleteById(filme.getId());
-	}
-
-	public List<Filme> findByGenero(Genero genero) {
-		return filmeRepository.findByGenero(genero);
 	}
 	
 }
