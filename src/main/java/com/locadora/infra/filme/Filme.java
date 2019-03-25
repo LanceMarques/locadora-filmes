@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -28,11 +29,14 @@ public class Filme {
 	private String titulo;
 
 	@NotNull
+	@Min(value = 0)
+	@Max(value =1000)
 	@Column(name = "DURACAO")
 	private int duracao;
 
 	@NotNull
 	@Min(value = 0)
+	@Max(value =1000)
 	@Column(name = "QUANTIDADE_ESTOQUE")
 	private int quantidadeEstoque;
 
@@ -48,6 +52,7 @@ public class Filme {
 
 	@NotNull
 	@Min(value = 0)
+	@Max(value = 100)
 	@Column(name = "VALOR_DIARIA", precision = 4, scale = 2)
 	private double valorDiaria;
 
