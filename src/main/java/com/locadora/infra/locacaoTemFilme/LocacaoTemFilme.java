@@ -38,7 +38,7 @@ public class LocacaoTemFilme {
 	private LocacaoTemFilme() {
 	}
 
-	private LocacaoTemFilme(Locacao locacao, Filme filme) {
+	public LocacaoTemFilme(Locacao locacao, Filme filme) {
 		this.locacao = locacao;
 		this.filme = filme;
 		this.id = new LocacaoTemFilmeId(locacao.getId(), filme.getId());

@@ -5,40 +5,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import com.locadora.infra.cliente.Cliente;
+import com.locadora.infra.enums.StatusLocacao;
+import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
+@Table(name="LOCACAO")
 @Entity
 public class Locacao {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@NotNull
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "DATA_REALIZACAO")
 	private Date dataRealizacao;
-	
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "DATA_DEVOLUCAO")
 	private Date dataDevolucao;
-	
+
 	@NotNull
-	private String status;
-	
-	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "STATUS")
+	private StatusLocacao status;
+
+	@Column(name = "VALOR_TOTAL")
 	private Double valorTotal;
 
-	@OneToMany(
-			mappedBy="locacao",
-			cascade=CascadeType.ALL,
-			orphanRemoval=true
-	)
+	@NotNull
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name = "CLIENTE_ID")
+	private Cliente cliente;
+	
+	@OneToMany(mappedBy = "locacao", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<LocacaoTemFilme> filmes = new ArrayList<>();
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -63,22 +80,30 @@ public class Locacao {
 		this.dataDevolucao = dataDevolucao;
 	}
 
-	public String getStatus() {
+	public StatusLocacao getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(StatusLocacao status) {
 		this.status = status;
 	}
 
-	public double getValorTotal() {
+	public Double getValorTotal() {
 		return valorTotal;
 	}
 
-	public void setValorTotal(double valorTotal) {
+	public void setValorTotal(Double valorTotal) {
 		this.valorTotal = valorTotal;
 	}
-	
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
 	public List<LocacaoTemFilme> getFilmes() {
 		return filmes;
 	}
@@ -86,7 +111,7 @@ public class Locacao {
 	public void setFilmes(List<LocacaoTemFilme> filmes) {
 		this.filmes = filmes;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -111,5 +136,5 @@ public class Locacao {
 			return false;
 		return true;
 	}
-	
+
 }
