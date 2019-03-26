@@ -2,6 +2,7 @@ package com.locadora.infra.filme;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,6 +26,7 @@ public class Filme {
 	private Integer id;
 
 	@NotBlank
+	@Size(min=2, max=50)
 	@Column(name = "TITULO", length = 50)
 	private String titulo;
 
@@ -32,21 +34,21 @@ public class Filme {
 	@Min(value = 0)
 	@Max(value =1000)
 	@Column(name = "DURACAO")
-	private int duracao;
+	private Integer duracao;
 
 	@NotNull
 	@Min(value = 0)
 	@Max(value =1000)
 	@Column(name = "QUANTIDADE_ESTOQUE")
-	private int quantidadeEstoque;
+	private Integer quantidadeEstoque;
 
 	@NotBlank
-	@Size(min=5)
+	@Size(min=5, max=1000)
 	@Column(name = "SINOPSE")
 	private String sinopse;
 
 	@NotBlank
-	@Size(min=5)
+	@Size(min=5, max=150)
 	@Column(name = "NOME_DIRETOR", length = 150)
 	private String nomeDiretor;
 
@@ -54,10 +56,10 @@ public class Filme {
 	@Min(value = 0)
 	@Max(value = 100)
 	@Column(name = "VALOR_DIARIA", precision = 4, scale = 2)
-	private double valorDiaria;
+	private Double valorDiaria;
 
 	@NotNull
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "GENERO_ID")
 	private Genero genero;
 

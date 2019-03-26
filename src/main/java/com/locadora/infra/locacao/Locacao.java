@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
 
@@ -20,13 +21,16 @@ public class Locacao {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
+	@NotNull
 	private Date dataRealizacao;
 	
 	private Date dataDevolucao;
 	
+	@NotNull
 	private String status;
 	
-	private double valorTotal;
+	
+	private Double valorTotal;
 
 	@OneToMany(
 			mappedBy="locacao",

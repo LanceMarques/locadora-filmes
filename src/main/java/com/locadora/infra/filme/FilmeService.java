@@ -7,19 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.locadora.infra.filme.exceptions.FilmeNaoEncontradoException;
 import com.locadora.infra.genero.Genero;
+import com.locadora.infra.genero.GeneroService;
 
 @Service
 public class FilmeService {
 
 	@Autowired
 	private FilmeRepository filmeRepository;
+	@Autowired
+	private GeneroService generoService;
 	
 	public List<Filme> listarTodos(){
-		return filmeRepository.findAll();
+		return this.filmeRepository.findAll();
 	}
 	
 	public Filme buscarPorId(Integer id) {
-		final Optional<Filme> filmeOpt = filmeRepository.findById(id);
+		final Optional<Filme> filmeOpt = this.filmeRepository.findById(id);
 		if(!filmeOpt.isPresent()) {
 			throw new FilmeNaoEncontradoException();
 		}
@@ -27,22 +30,26 @@ public class FilmeService {
 	}
 	
 	public List<Filme> buscarPorGenero(Genero genero) {
-		return filmeRepository.findByGenero(genero);
+		return this.filmeRepository.findByGenero(genero);
 	}
 	
 	public Filme criar(Filme filme) {
-		return filmeRepository.save(filme);
+		Integer generoId=filme.getGenero().getId();
+		Genero generoSalvo = generoService.buscarPorId(generoId);
+		
+		filme.setGenero(generoSalvo);
+		return this.filmeRepository.save(filme);
 	}
 
 	public Filme atualizar(Integer id, Filme filme) {
 		final Filme filmesalvo = buscarPorId(id);
 		BeanUtils.copyProperties(filme, filmesalvo,"id");
-		return filmeRepository.save(filmesalvo);
+		return this.filmeRepository.save(filmesalvo);
 	}
 	
 	public void excluir(Integer id) {
 		final Filme filme = buscarPorId(id);
-		filmeRepository.deleteById(filme.getId());
+		this.filmeRepository.deleteById(filme.getId());
 	}
 	
 }

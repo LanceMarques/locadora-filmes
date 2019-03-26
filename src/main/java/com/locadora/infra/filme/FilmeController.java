@@ -32,32 +32,32 @@ public class FilmeController {
 	
 	@GetMapping
 	public ResponseEntity<List<Filme>> listarTodos(){
-		final List<Filme> filmes = filmeService.listarTodos();
+		final List<Filme> filmes = this.filmeService.listarTodos();
 		return ResponseEntity.status(HttpStatus.OK).body(filmes);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Filme> buscarPorId(@PathVariable("id") Integer id) {
-		final Filme filme = filmeService.buscarPorId(id);
+		final Filme filme = this.filmeService.buscarPorId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(filme);
 	}
 	
 	@PostMapping
 	public ResponseEntity<Filme> criar(@Valid @RequestBody Filme filme, HttpServletResponse response){
-		final Filme filmeSalvo = filmeService.criar(filme);
-		publisher.publishEvent(new RecursoCriadoEvent(this, response, filmeSalvo.getId()));
+		final Filme filmeSalvo = this.filmeService.criar(filme);
+		this.publisher.publishEvent(new RecursoCriadoEvent(this, response, filmeSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(filmeSalvo);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Filme> atualizar(@PathVariable("id") Integer id, @Valid @RequestBody Filme filme){
-		final Filme filmeAtualizado = filmeService.atualizar(id, filme);
+		final Filme filmeAtualizado = this.filmeService.atualizar(id, filme);
 		return ResponseEntity.status(HttpStatus.OK).body(filmeAtualizado);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Filme> excluir(@PathVariable("id") Integer id){
-		filmeService.excluir(id);
+		this.filmeService.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}
 }

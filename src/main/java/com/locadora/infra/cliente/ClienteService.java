@@ -15,11 +15,11 @@ public class ClienteService {
 	ClienteRepository clienteRepository;
 
 	public List<Cliente> listarTodos() {
-		return clienteRepository.findAll();
+		return this.clienteRepository.findAll();
 	}
 
 	public Cliente buscarPorId(Integer id) {
-		final Optional<Cliente> clienteOpt = clienteRepository.findById(id);
+		final Optional<Cliente> clienteOpt = this.clienteRepository.findById(id);
 		if (!clienteOpt.isPresent()) {
 			throw new ClienteNaoEncontradoException();
 		}
@@ -32,23 +32,27 @@ public class ClienteService {
 			throw new CpfJaCadastradoException();
 		}
 		cliente.setCpf(formatarCpf(cliente.getCpf()));
-		return clienteRepository.save(cliente);
+		return this.clienteRepository.save(cliente);
 	}
 
 	public Cliente atualizar(Integer id, Cliente cliente) {
 		final Cliente clienteSalvo = buscarPorId(id);
 		final Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
+		
 		if (clienteMesmoCpf.isPresent() && clienteMesmoCpf.get().getId() != id) {
 			throw new CpfJaCadastradoException();
 		}
+		
 		cliente.setCpf(formatarCpf(cliente.getCpf()));
+		
 		BeanUtils.copyProperties(cliente, clienteSalvo, "id");
-		return clienteRepository.save(clienteSalvo);
+		
+		return this.clienteRepository.save(clienteSalvo);
 	}
 
 	public void excluir(Integer id) {
 		final Cliente cliente = buscarPorId(id);
-		clienteRepository.deleteById(cliente.getId());
+		this.clienteRepository.deleteById(cliente.getId());
 	}
 
 	private String formatarCpf(String cpf) {
@@ -63,11 +67,12 @@ public class ClienteService {
 
 	public Optional<Cliente> buscarPorCpf(String cpf) {
 		cpf = formatarCpf(cpf);
-		return clienteRepository.findByCpf(cpf);
+		return this.clienteRepository.findByCpf(cpf);
 	}
 
 	public Cliente buscarClientePorCpf(String cpf) {
 		final Optional<Cliente> clienteOpt = buscarPorCpf(cpf);
+		
 		if (!clienteOpt.isPresent()) {
 			throw new ClienteNaoEncontradoException();
 		}

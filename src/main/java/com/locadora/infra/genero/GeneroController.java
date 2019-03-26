@@ -29,32 +29,32 @@ public class GeneroController {
 	
 	@GetMapping
 	public ResponseEntity<List<Genero>> listarTodos(){
-		final List<Genero> generos = generoService.listarTodos();
+		final List<Genero> generos = this.generoService.listarTodos();
 		return ResponseEntity.status(HttpStatus.OK).body(generos);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Genero> buscarPorId(@PathVariable("id") Integer id) {
-		final Genero genero = generoService.buscarPorId(id);
+		final Genero genero = this.generoService.buscarPorId(id);
 		return ResponseEntity.status(HttpStatus.OK).body(genero);
 	}
 	
 	@PostMapping
 	public ResponseEntity<Genero> criar(@Valid @RequestBody Genero genero, HttpServletResponse response) {
-		final Genero generoSalvo = generoService.criar(genero);
-		publisher.publishEvent(new RecursoCriadoEvent(this, response, generoSalvo.getId()));
+		final Genero generoSalvo = this.generoService.criar(genero);
+		this.publisher.publishEvent(new RecursoCriadoEvent(this, response, generoSalvo.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(generoSalvo);
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Genero> atualizar(@PathVariable("id") Integer id, @Valid @RequestBody Genero genero){
-		final Genero generoAtualizado = generoService.atualizar(id, genero);
+		final Genero generoAtualizado = this.generoService.atualizar(id, genero);
 		return ResponseEntity.status(HttpStatus.OK).body(generoAtualizado);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Genero> excluir(@PathVariable("id") Integer id) {
-		generoService.excluir(id);
+		this.generoService.excluir(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}
 	
