@@ -9,6 +9,9 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.locadora.infra.filme.Filme;
 import com.locadora.infra.locacao.Locacao;
 
@@ -20,6 +23,7 @@ public class LocacaoTemFilme {
 	private LocacaoTemFilmeId id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@NotFound(action=NotFoundAction.IGNORE)
 	@MapsId("locacaoId")
 	private Locacao locacao;
 	
@@ -35,13 +39,18 @@ public class LocacaoTemFilme {
 	@Column(name="VALOR_TOTAL_DIARIA")
 	private Double valorTotalDaDiaria;
 
-	private LocacaoTemFilme() {
+	public LocacaoTemFilme() {
 	}
-
+	
+	public LocacaoTemFilme(Filme filme) {
+		setFilme(filme);
+		setId(new LocacaoTemFilmeId(filme.getId()));
+	}
+	
 	public LocacaoTemFilme(Locacao locacao, Filme filme) {
-		this.locacao = locacao;
-		this.filme = filme;
-		this.id = new LocacaoTemFilmeId(locacao.getId(), filme.getId());
+		setLocacao(locacao);
+		setFilme(filme);
+		setId(new LocacaoTemFilmeId(locacao.getId(),filme.getId()));
 	}
 
 	public LocacaoTemFilmeId getId() {

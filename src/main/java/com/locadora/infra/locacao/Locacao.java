@@ -21,11 +21,12 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.locadora.infra.cliente.Cliente;
 import com.locadora.infra.enums.StatusLocacao;
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
-@Table(name="LOCACAO")
 @Entity
+@Table(name="LOCACAO")
 public class Locacao {
 
 	@Id
@@ -53,9 +54,25 @@ public class Locacao {
 	@JoinColumn(name = "CLIENTE_ID")
 	private Cliente cliente;
 	
-	@OneToMany(mappedBy = "locacao", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<LocacaoTemFilme> filmes = new ArrayList<>();
+	@OneToMany(mappedBy = "locacao", cascade=CascadeType.ALL,orphanRemoval = true)
+	private List<LocacaoTemFilme> filmes;
 	
+	public Locacao() {
+		super();
+	}
+	
+	public Locacao(Integer id, Date dataRealizacao, Date dataDevolucao, @NotNull StatusLocacao status,
+			Double valorTotal, @NotNull Cliente cliente, List<LocacaoTemFilme> filmes) {
+		super();
+		this.id = id;
+		this.dataRealizacao = dataRealizacao;
+		this.dataDevolucao = dataDevolucao;
+		this.status = status;
+		this.valorTotal = valorTotal;
+		this.cliente = cliente;
+		this.filmes = filmes;
+	}
+
 	public Integer getId() {
 		return id;
 	}

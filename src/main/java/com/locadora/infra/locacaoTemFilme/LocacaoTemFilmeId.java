@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
 
 @Embeddable
 public class LocacaoTemFilmeId implements Serializable{
@@ -19,11 +20,19 @@ public class LocacaoTemFilmeId implements Serializable{
 	@Column(name = "FILME_ID")
 	private Integer filmeId;
 	
-	private LocacaoTemFilmeId() {}
+	public LocacaoTemFilmeId() {
+		System.out.println("CONSTRUTOR VAZIO");
+	}
+	
+	public LocacaoTemFilmeId(Integer filmeId) {
+		System.out.println("CONSTRUTOR FILME");
+		setFilmeId(filmeId);
+	}
 	
 	public LocacaoTemFilmeId(Integer locacaoId, Integer filmeId) {
-		this.locacaoId = locacaoId;
-		this.filmeId = filmeId;
+		System.out.println("CONSTRUTOR COMPLETO");
+		this.setLocacaoId(locacaoId);
+		this.setFilmeId(filmeId);
 	}
 
 	public Integer getLocacaoId() {

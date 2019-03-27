@@ -1,5 +1,7 @@
 package com.locadora.infra.locacaoTemFilme;
 
-public class LocacaoTemFilmeRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface LocacaoTemFilmeRepository extends JpaRepository<LocacaoTemFilme, Integer>{
 
 }
