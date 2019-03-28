@@ -9,9 +9,7 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.locadora.infra.filme.Filme;
 import com.locadora.infra.locacao.Locacao;
 
@@ -22,12 +20,11 @@ public class LocacaoTemFilme {
 	@EmbeddedId
 	private LocacaoTemFilmeId id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@NotFound(action=NotFoundAction.IGNORE)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("locacaoId")
 	private Locacao locacao;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@MapsId("filmeId")
 	private Filme filme;
 	
@@ -37,16 +34,11 @@ public class LocacaoTemFilme {
 	
 	@NotNull
 	@Column(name="VALOR_TOTAL_DIARIA")
-	private Double valorTotalDaDiaria;
+	private double valorTotalDaDiaria;
 
 	public LocacaoTemFilme() {
 	}
-	
-	public LocacaoTemFilme(Filme filme) {
-		setFilme(filme);
-		setId(new LocacaoTemFilmeId(filme.getId()));
-	}
-	
+		
 	public LocacaoTemFilme(Locacao locacao, Filme filme) {
 		setLocacao(locacao);
 		setFilme(filme);
@@ -61,6 +53,7 @@ public class LocacaoTemFilme {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	public Locacao getLocacao() {
 		return locacao;
 	}
@@ -85,12 +78,12 @@ public class LocacaoTemFilme {
 		this.quantidadeLocada = quantidadeLocada;
 	}
 
-	public Double getValorTotalDaDiaria() {
+	public double getValorTotalDaDiaria() {
 		return valorTotalDaDiaria;
 	}
 
-	public void setValorTotalDaDiaria(Double valorTotalDaDiaria) {
-		this.valorTotalDaDiaria = valorTotalDaDiaria;
+	public void setValorTotalDaDiaria(double i) {
+		this.valorTotalDaDiaria = i;
 	}
 
 	@Override

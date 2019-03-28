@@ -21,16 +21,9 @@ public class LocacaoTemFilmeId implements Serializable{
 	private Integer filmeId;
 	
 	public LocacaoTemFilmeId() {
-		System.out.println("CONSTRUTOR VAZIO");
 	}
-	
-	public LocacaoTemFilmeId(Integer filmeId) {
-		System.out.println("CONSTRUTOR FILME");
-		setFilmeId(filmeId);
-	}
-	
+		
 	public LocacaoTemFilmeId(Integer locacaoId, Integer filmeId) {
-		System.out.println("CONSTRUTOR COMPLETO");
 		this.setLocacaoId(locacaoId);
 		this.setFilmeId(filmeId);
 	}

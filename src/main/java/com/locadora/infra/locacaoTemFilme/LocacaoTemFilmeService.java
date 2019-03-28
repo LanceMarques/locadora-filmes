@@ -34,19 +34,23 @@ public class LocacaoTemFilmeService {
 	}
 	
 	public List<LocacaoTemFilme> associarFilmes(List<LocacaoTemFilme> filmesLocados, Locacao locacao) {
+		int filmeId;
 		Filme filmeSalvo;
 		LocacaoTemFilme filmeLocado;
 		List<LocacaoTemFilme> filmes = new ArrayList<>();
-		int filmeId;
 		for (LocacaoTemFilme locacaoTemFilme : filmesLocados) {
-			filmeLocado = locacaoTemFilme;
 			filmeId = locacaoTemFilme.getFilme().getId();
 			filmeSalvo = filmeService.buscarPorId(filmeId);
-			filmeLocado =new LocacaoTemFilme(locacao, filmeSalvo);
+			filmeLocado = new LocacaoTemFilme(locacao, filmeSalvo);
+			filmeLocado.setQuantidadeLocada(locacaoTemFilme.getQuantidadeLocada());
 			filmeLocado.setValorTotalDaDiaria(filmeLocado.getQuantidadeLocada()*filmeSalvo.getValorDiaria());
 			filmes.add(filmeLocado);
 		}		
 		return filmes;
+	}
+	
+	public void calculaValorTotalDiaria() {
+		//ToDo
 	}
 	
 	public void salvaTodas(List<LocacaoTemFilme> filmesLocados) {

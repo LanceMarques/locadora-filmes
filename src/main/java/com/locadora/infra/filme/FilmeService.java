@@ -52,4 +52,18 @@ public class FilmeService {
 		this.filmeRepository.deleteById(filme.getId());
 	}
 	
+	public void atualizaEstoqueSaida(int quantidadeLocada, Filme filme) {
+		atualizaEstoque(-quantidadeLocada, filme);
+	}
+	
+	public void atualizaEstoqueEntrada(int quantidadeDevolvida, Filme filme) {
+		atualizaEstoque(quantidadeDevolvida, filme);
+	}
+	
+	public void atualizaEstoque(int quantidade, Filme filme) {
+		int estoqueDisponivel = filme.getQuantidadeEstoque();
+		filme.setQuantidadeEstoque(estoqueDisponivel+quantidade);
+		atualizar(filme.getId(), filme);
+	}
+
 }
