@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.locadora.infra.filme.exceptions.FilmeEstoqueIndisponivelException;
 import com.locadora.infra.filme.exceptions.FilmeNaoEncontradoException;
 import com.locadora.infra.genero.Genero;
 import com.locadora.infra.genero.GeneroService;
@@ -27,6 +29,14 @@ public class FilmeService {
 			throw new FilmeNaoEncontradoException();
 		}
 		return filmeOpt.get();
+	}
+	
+	public Filme buscarPorIdComEstoqueDisponivel(int id, int quantidadeLocada) {
+		Filme filmeSalvo = buscarPorId(id);
+		if(filmeSalvo.getQuantidadeEstoque()<quantidadeLocada) {
+			throw new FilmeEstoqueIndisponivelException();
+		}
+		return filmeSalvo;
 	}
 	
 	public List<Filme> buscarPorGenero(Genero genero) {

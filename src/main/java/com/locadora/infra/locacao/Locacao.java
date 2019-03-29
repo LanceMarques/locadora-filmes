@@ -54,10 +54,11 @@ public class Locacao {
 	@JoinColumn(name = "CLIENTE_ID")
 	private Cliente cliente;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "locacao", cascade=CascadeType.ALL,orphanRemoval = true)
-	private List<LocacaoTemFilme> filmes;
+	private List<LocacaoTemFilme> filmes = new ArrayList<LocacaoTemFilme>();
 	
-	public Locacao() {
+	private Locacao() {
 		super();
 	}
 	
@@ -73,6 +74,13 @@ public class Locacao {
 		this.filmes = filmes;
 	}
 
+	public void limparFilmes() {
+		this.filmes.clear();
+	}
+	public void atualizaFilmes(List<LocacaoTemFilme> novosFilmes) {
+		this.filmes.addAll(novosFilmes);
+	}
+	
 	public Integer getId() {
 		return id;
 	}

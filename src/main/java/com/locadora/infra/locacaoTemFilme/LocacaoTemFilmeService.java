@@ -32,25 +32,53 @@ public class LocacaoTemFilmeService {
 			filmeLocado.setValorTotalDaDiaria(valorTotalDiaria);
 		}
 	}
-	
+		
 	public List<LocacaoTemFilme> associarFilmes(List<LocacaoTemFilme> filmesLocados, Locacao locacao) {
 		int filmeId;
+		int qtdLocada;
 		Filme filmeSalvo;
 		LocacaoTemFilme filmeLocado;
+		
 		List<LocacaoTemFilme> filmes = new ArrayList<>();
+		
 		for (LocacaoTemFilme locacaoTemFilme : filmesLocados) {
 			filmeId = locacaoTemFilme.getFilme().getId();
-			filmeSalvo = filmeService.buscarPorId(filmeId);
+			qtdLocada = locacaoTemFilme.getQuantidadeLocada();
+			
+			filmeSalvo = filmeService.buscarPorIdComEstoqueDisponivel(filmeId, qtdLocada);
+			
 			filmeLocado = new LocacaoTemFilme(locacao, filmeSalvo);
 			filmeLocado.setQuantidadeLocada(locacaoTemFilme.getQuantidadeLocada());
-			filmeLocado.setValorTotalDaDiaria(filmeLocado.getQuantidadeLocada()*filmeSalvo.getValorDiaria());
+			calculaValorTotalDiaria(filmeLocado);
 			filmes.add(filmeLocado);
 		}		
 		return filmes;
 	}
 	
-	public void calculaValorTotalDiaria() {
-		//ToDo
+	public int contarFilmesNasLocacoes(List<Locacao> locacoes) {
+		int qtdFilmes=0;
+		for (Locacao locacao: locacoes) {
+			qtdFilmes+=contarFilmes(locacao.getFilmes());
+		}
+		return qtdFilmes;
+	}
+	
+	public int contarFilmes(List<LocacaoTemFilme> filmesLocados) {
+		int qtdFilmes=0;
+		for (LocacaoTemFilme filme : filmesLocados) {
+			qtdFilmes+=filme.getQuantidadeLocada();
+		}
+		return qtdFilmes;
+	}
+	
+	public void calculaValorTotalDiaria(LocacaoTemFilme locacaoTemFilme) {
+		double valorTotalDiaria;
+		
+		final double valorDiaria = locacaoTemFilme.getFilme().getValorDiaria();
+		final int qtdLocada = locacaoTemFilme.getQuantidadeLocada();
+		valorTotalDiaria = valorDiaria*qtdLocada;
+		
+		locacaoTemFilme.setValorTotalDaDiaria(valorTotalDiaria);
 	}
 	
 	public void salvaTodas(List<LocacaoTemFilme> filmesLocados) {

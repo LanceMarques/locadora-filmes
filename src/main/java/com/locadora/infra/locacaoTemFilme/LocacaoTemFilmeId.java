@@ -20,7 +20,7 @@ public class LocacaoTemFilmeId implements Serializable{
 	@Column(name = "FILME_ID")
 	private Integer filmeId;
 	
-	public LocacaoTemFilmeId() {
+	private LocacaoTemFilmeId() {
 	}
 		
 	public LocacaoTemFilmeId(Integer locacaoId, Integer filmeId) {

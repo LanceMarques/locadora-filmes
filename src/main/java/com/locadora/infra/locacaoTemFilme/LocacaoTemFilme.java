@@ -24,7 +24,8 @@ public class LocacaoTemFilme {
 	@MapsId("locacaoId")
 	private Locacao locacao;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER
+			)
 	@MapsId("filmeId")
 	private Filme filme;
 	
