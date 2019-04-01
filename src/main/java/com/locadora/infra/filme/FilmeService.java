@@ -39,6 +39,20 @@ public class FilmeService {
 		return filmeSalvo;
 	}
 	
+	public Filme buscarReduzirEstoque(int filmeId,int quantidadeLocada) {
+		Filme filmeSalvo = this.buscarPorIdComEstoqueDisponivel(filmeId,quantidadeLocada);
+		int estoqueDisponivel = filmeSalvo.getQuantidadeEstoque()-quantidadeLocada;
+		filmeSalvo.setQuantidadeEstoque(estoqueDisponivel);
+		return filmeSalvo;
+	}
+	
+	public Filme buscarAcrescentarEstoque(int filmeId,int quantidadeDevolvida) {
+		Filme filmeSalvo = this.buscarPorId(filmeId);
+		int estoqueDisponivel = filmeSalvo.getQuantidadeEstoque()+quantidadeDevolvida;
+		filmeSalvo.setQuantidadeEstoque(estoqueDisponivel);
+		return filmeSalvo;
+	}
+	
 	public List<Filme> buscarPorGenero(Genero genero) {
 		return this.filmeRepository.findByGenero(genero);
 	}
@@ -52,7 +66,7 @@ public class FilmeService {
 	}
 
 	public Filme atualizar(Integer id, Filme filme) {
-		final Filme filmesalvo = buscarPorId(id);
+		Filme filmesalvo = buscarPorId(id);
 		BeanUtils.copyProperties(filme, filmesalvo,"id");
 		return this.filmeRepository.save(filmesalvo);
 	}
@@ -61,19 +75,9 @@ public class FilmeService {
 		final Filme filme = buscarPorId(id);
 		this.filmeRepository.deleteById(filme.getId());
 	}
-	
-	public void atualizaEstoqueSaida(int quantidadeLocada, Filme filme) {
-		atualizaEstoque(-quantidadeLocada, filme);
-	}
-	
-	public void atualizaEstoqueEntrada(int quantidadeDevolvida, Filme filme) {
-		atualizaEstoque(quantidadeDevolvida, filme);
-	}
-	
-	public void atualizaEstoque(int quantidade, Filme filme) {
-		int estoqueDisponivel = filme.getQuantidadeEstoque();
-		filme.setQuantidadeEstoque(estoqueDisponivel+quantidade);
-		atualizar(filme.getId(), filme);
-	}
 
+	public void salvarTodos(List<Filme> filmes) {
+		this.filmeRepository.saveAll(filmes);
+	}
+	
 }

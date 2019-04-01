@@ -12,9 +12,6 @@ import com.locadora.infra.locacao.Locacao;
 
 @Service
 public class LocacaoTemFilmeService {
-
-	@Autowired
-	private LocacaoTemFilmeRepository locacaoTemFilmeRepository;
 	
 	@Autowired
 	private FilmeService filmeService;
@@ -32,7 +29,7 @@ public class LocacaoTemFilmeService {
 			filmeLocado.setValorTotalDaDiaria(valorTotalDiaria);
 		}
 	}
-		
+	
 	public List<LocacaoTemFilme> associarFilmes(List<LocacaoTemFilme> filmesLocados, Locacao locacao) {
 		int filmeId;
 		int qtdLocada;
@@ -40,19 +37,35 @@ public class LocacaoTemFilmeService {
 		LocacaoTemFilme filmeLocado;
 		
 		List<LocacaoTemFilme> filmes = new ArrayList<>();
+		List<Filme> filmesDasLocacoes = new ArrayList<>();
 		
 		for (LocacaoTemFilme locacaoTemFilme : filmesLocados) {
 			filmeId = locacaoTemFilme.getFilme().getId();
 			qtdLocada = locacaoTemFilme.getQuantidadeLocada();
+						
+			filmeSalvo = this.filmeService.buscarReduzirEstoque(filmeId, qtdLocada);
 			
-			filmeSalvo = filmeService.buscarPorIdComEstoqueDisponivel(filmeId, qtdLocada);
+			filmeLocado = new LocacaoTemFilme(locacao, filmeSalvo, qtdLocada);
+			this.calculaValorTotalDiaria(filmeLocado);
 			
-			filmeLocado = new LocacaoTemFilme(locacao, filmeSalvo);
-			filmeLocado.setQuantidadeLocada(locacaoTemFilme.getQuantidadeLocada());
-			calculaValorTotalDiaria(filmeLocado);
+			filmesDasLocacoes.add(filmeSalvo);
 			filmes.add(filmeLocado);
-		}		
+		}
+		this.filmeService.salvarTodos(filmesDasLocacoes);
 		return filmes;
+	}
+		
+	public void devolverAoEstoque(List<LocacaoTemFilme> filmesLocados) {
+		Filme filmeDevolvido;
+		int filmeId;
+		List<Filme> filmesDevolvidos = new ArrayList<>();
+		
+		for (LocacaoTemFilme filmeLocado : filmesLocados) {
+			filmeId = filmeLocado.getFilme().getId();
+			filmeDevolvido = this.filmeService.buscarPorId(filmeId);
+			filmesDevolvidos.add(filmeDevolvido);
+		}
+		this.filmeService.salvarTodos(filmesDevolvidos);
 	}
 	
 	public int contarFilmesNasLocacoes(List<Locacao> locacoes) {
@@ -65,24 +78,18 @@ public class LocacaoTemFilmeService {
 	
 	public int contarFilmes(List<LocacaoTemFilme> filmesLocados) {
 		int qtdFilmes=0;
-		for (LocacaoTemFilme filme : filmesLocados) {
-			qtdFilmes+=filme.getQuantidadeLocada();
+		for (LocacaoTemFilme filmeLocado: filmesLocados) {
+			qtdFilmes+=filmeLocado.getQuantidadeLocada();
 		}
 		return qtdFilmes;
 	}
 	
 	public void calculaValorTotalDiaria(LocacaoTemFilme locacaoTemFilme) {
-		double valorTotalDiaria;
-		
 		final double valorDiaria = locacaoTemFilme.getFilme().getValorDiaria();
 		final int qtdLocada = locacaoTemFilme.getQuantidadeLocada();
-		valorTotalDiaria = valorDiaria*qtdLocada;
+		final double valorTotalDiaria = valorDiaria*qtdLocada;
 		
 		locacaoTemFilme.setValorTotalDaDiaria(valorTotalDiaria);
-	}
-	
-	public void salvaTodas(List<LocacaoTemFilme> filmesLocados) {
-		locacaoTemFilmeRepository.saveAll(filmesLocados);
 	}
 	
 }

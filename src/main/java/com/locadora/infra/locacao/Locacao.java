@@ -54,8 +54,7 @@ public class Locacao {
 	@JoinColumn(name = "CLIENTE_ID")
 	private Cliente cliente;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "locacao", cascade=CascadeType.ALL,orphanRemoval = true)
+	@OneToMany(mappedBy = "locacao", cascade=CascadeType.ALL)
 	private List<LocacaoTemFilme> filmes = new ArrayList<LocacaoTemFilme>();
 	
 	private Locacao() {
