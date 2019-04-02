@@ -11,72 +11,75 @@ import com.locadora.infra.cliente.exceptions.CpfJaCadastradoException;
 @Service
 public class ClienteService {
 
-	@Autowired
-	ClienteRepository clienteRepository;
+  @Autowired
+  private ClienteRepository clienteRepository;
 
-	public List<Cliente> listarTodos() {
-		return this.clienteRepository.findAll();
-	}
+  public List<Cliente> listarTodos() {
+    return this.clienteRepository.findAll();
+  }
 
-	public Cliente buscarPorId(Integer id) {
-		final Optional<Cliente> clienteOpt = this.clienteRepository.findById(id);
-		if (!clienteOpt.isPresent()) {
-			throw new ClienteNaoEncontradoException();
-		}
-		return clienteOpt.get();
-	}
+  public Cliente buscarPorId(Integer id) {
+    final Optional<Cliente> clienteOpt = this.clienteRepository.findById(id);
+    if (!clienteOpt.isPresent()) {
+      throw new ClienteNaoEncontradoException();
+    }
+    return clienteOpt.get();
+  }
 
-	public Cliente criar(Cliente cliente) {
-		final Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
-		if (clienteMesmoCpf.isPresent()) {
-			throw new CpfJaCadastradoException();
-		}
-		cliente.setCpf(formatarCpf(cliente.getCpf()));
-		return this.clienteRepository.save(cliente);
-	}
+  public Cliente criar(Cliente cliente) {
+    final Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
+    if (clienteMesmoCpf.isPresent()) {
+      throw new CpfJaCadastradoException();
+    }
+    cliente.setCpf(formatarCpf(cliente.getCpf()));
+    return this.clienteRepository.save(cliente);
+  }
 
-	public Cliente atualizar(Integer id, Cliente cliente) {
-		final Cliente clienteSalvo = buscarPorId(id);
-		final Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
-		
-		if (clienteMesmoCpf.isPresent() && clienteMesmoCpf.get().getId() != id) {
-			throw new CpfJaCadastradoException();
-		}
-		
-		cliente.setCpf(formatarCpf(cliente.getCpf()));
-		
-		BeanUtils.copyProperties(cliente, clienteSalvo, "id");
-		
-		return this.clienteRepository.save(clienteSalvo);
-	}
+  public Cliente atualizar(Integer id, Cliente cliente) {
+    final Cliente clienteSalvo = buscarPorId(id);
+    final Optional<Cliente> clienteMesmoCpf = buscarPorCpf(cliente.getCpf());
 
-	public void excluir(Integer id) {
-		final Cliente cliente = buscarPorId(id);
-		this.clienteRepository.deleteById(cliente.getId());
-	}
+    if (clienteMesmoCpf.isPresent() && clienteMesmoCpf.get().getId() != id) {
+      throw new CpfJaCadastradoException();
+    }
 
-	private String formatarCpf(String cpf) {
-		if (cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}")) {
-			return cpf;
-		} else {
-			String cpfFormatado = cpf.substring(0, 3) + "." + cpf.substring(3, 6) + "." + cpf.substring(6, 9) + "-"
-					+ cpf.substring(9, 11);
-			return cpfFormatado;
-		}
-	}
+    cliente.setCpf(formatarCpf(cliente.getCpf()));
 
-	public Optional<Cliente> buscarPorCpf(String cpf) {
-		cpf = formatarCpf(cpf);
-		return this.clienteRepository.findByCpf(cpf);
-	}
+    BeanUtils.copyProperties(cliente, clienteSalvo, "id");
 
-	public Cliente buscarClientePorCpf(String cpf) {
-		final Optional<Cliente> clienteOpt = buscarPorCpf(cpf);
-		
-		if (!clienteOpt.isPresent()) {
-			throw new ClienteNaoEncontradoException();
-		}
-		return clienteOpt.get();
-	}
+    return this.clienteRepository.save(clienteSalvo);
+  }
 
+  public void excluir(Integer id) {
+    final Cliente cliente = buscarPorId(id);
+    this.clienteRepository.deleteById(cliente.getId());
+  }
+
+  public Optional<Cliente> buscarPorCpf(String cpf) {
+    final String cpfFormatado = formatarCpf(cpf);
+    return this.clienteRepository.findByCpf(cpfFormatado);
+  }
+
+  public Cliente buscarClientePorCpf(String cpf) {
+    final Optional<Cliente> clienteOpt = buscarPorCpf(cpf);
+
+    if (!clienteOpt.isPresent()) {
+      throw new ClienteNaoEncontradoException();
+    }
+    return clienteOpt.get();
+  }
+
+  private String formatarCpf(String cpf) {
+    final String cpfFormatado;
+    if (cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}")) {
+      cpfFormatado = cpf;
+    } else {
+      cpfFormatado =    cpf.substring(0, 3) + "." +
+                        cpf.substring(3, 6) + "." +
+                        cpf.substring(6, 9) + "-" +
+                        cpf.substring(9, 11);
+    }
+    return cpfFormatado;
+  }
+  
 }

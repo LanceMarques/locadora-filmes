@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LocadoraFilmesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LocadoraFilmesApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(LocadoraFilmesApplication.class, args);
+  }
 
 }

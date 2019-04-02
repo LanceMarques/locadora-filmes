@@ -1,6 +1,6 @@
 package com.locadora.infra.filme.exceptions;
 
-public class FilmeJaCadastradoException extends RuntimeException {
+public class LocacaoAssociadaException extends RuntimeException {
 
   /**
    * 

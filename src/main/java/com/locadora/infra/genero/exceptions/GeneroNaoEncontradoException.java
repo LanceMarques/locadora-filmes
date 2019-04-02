@@ -1,10 +1,10 @@
 package com.locadora.infra.genero.exceptions;
 
-public class GeneroNaoEncontradoException extends RuntimeException{
+public class GeneroNaoEncontradoException extends RuntimeException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
 
 }

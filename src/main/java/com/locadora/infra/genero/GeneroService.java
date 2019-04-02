@@ -14,52 +14,54 @@ import com.locadora.infra.genero.exceptions.GeneroNaoEncontradoException;
 @Service
 public class GeneroService {
 
-	@Autowired
-	private GeneroRepository generoRepository;
-	
-	@Autowired
-	private FilmeService filmeService;
-	
-	public List<Genero> listarTodos() {
-		return this.generoRepository.findAll();
-	}
+  @Autowired
+  private GeneroRepository generoRepository;
 
-	public Genero buscarPorId(Integer id) {
-		final Optional<Genero> generoOpt = this.generoRepository.findById(id);
-		if (!generoOpt.isPresent()) {
-			throw new GeneroNaoEncontradoException();
-		}
-		return generoOpt.get();
-	}
+  @Autowired
+  private FilmeService filmeService;
 
-	public Genero criar(Genero genero) {
-		final Optional<Genero> generoMesmoNome = buscarPorNome(genero.getNome());
-		if (generoMesmoNome.isPresent()) {
-			throw new GeneroJaCadastradoException();
-		}
-		return this.generoRepository.save(genero);
-	}
+  public List<Genero> listarTodos() {
+    return this.generoRepository.findAll();
+  }
 
-	public Genero atualizar(Integer id, Genero genero) {
-		final Genero generoSalvo = buscarPorId(id);
-		final Optional<Genero> generoMesmoNome = buscarPorNome(genero.getNome());
-		if (generoMesmoNome.isPresent() && generoMesmoNome.get().getId() != id) {
-			throw new GeneroJaCadastradoException();
-		}
-		BeanUtils.copyProperties(genero, generoSalvo, "id");
-		return this.generoRepository.save(generoSalvo);
-	}
+  public Genero buscarPorId(Integer id) {
+    final Optional<Genero> generoOpt = this.generoRepository.findById(id);
+    if (!generoOpt.isPresent()) {
+      throw new GeneroNaoEncontradoException();
+    }
+    return generoOpt.get();
+  }
 
-	public void excluir(Integer id) {
-		final Genero genero = buscarPorId(id);
-		List<Filme> filmesAssociados = filmeService.buscarPorGenero(genero);
-		if(filmesAssociados.isEmpty()) {
-		this.generoRepository.deleteById(genero.getId());
-		}else throw new FilmeAssociadoException();
-	}
+  public Genero criar(Genero genero) {
+    final Optional<Genero> generoSalvo= buscarPorNome(genero.getNome());
+    if (generoSalvo.isPresent()) {
+      throw new GeneroJaCadastradoException();
+    }
+    return this.generoRepository.save(genero);
+  }
 
-	private Optional<Genero> buscarPorNome(String nome) {
-		final Optional<Genero> generoOpt = this.generoRepository.findByNome(nome);
-		return generoOpt;
-	}
+  public Genero atualizar(Integer id, Genero genero) {
+    final Genero generoSalvo = buscarPorId(id);
+    final Optional<Genero> generoRepetido= buscarPorNome(genero.getNome());
+    if (generoRepetido.isPresent() && generoRepetido.get().getId() != id) {
+      throw new GeneroJaCadastradoException();
+    }
+    BeanUtils.copyProperties(genero, generoSalvo, "id");
+    return this.generoRepository.save(generoSalvo);
+  }
+
+  public void excluir(Integer id) {
+    final Genero genero = buscarPorId(id);
+    final List<Filme> filmesAssociados = filmeService.listarPorGenero(genero);
+    if (filmesAssociados.isEmpty()) {
+      this.generoRepository.deleteById(genero.getId());
+    } else {
+      throw new FilmeAssociadoException();
+    }
+  }
+
+  private Optional<Genero> buscarPorNome(String nome) {
+    final Optional<Genero> generoSalvo = this.generoRepository.findByNome(nome);
+    return generoSalvo;
+  }
 }

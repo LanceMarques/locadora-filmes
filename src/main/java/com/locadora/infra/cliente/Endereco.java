@@ -8,67 +8,80 @@ import javax.validation.constraints.Size;
 @Embeddable
 public class Endereco {
 
-	@NotBlank
-	@Size(min = 5, max = 150)
-	@Column(name = "RUA")
-	private String rua;
+  @NotBlank
+  @Size(min = 5, max = 150)
+  @Column(name = "RUA")
+  private String rua;
 
-	@NotBlank
-	@Column(name = "CEP", length = 10)
-	private String cep;
+  @NotBlank
+  @Column(name = "CEP", length = 10)
+  private String cep;
 
-	@NotBlank
-	@Size(min = 3, max = 50)
-	@Column(name = "BAIRRO")
-	private String bairro;
+  @NotBlank
+  @Size(min = 3, max = 50)
+  @Column(name = "BAIRRO")
+  private String bairro;
 
-	@Size(max = 150)
-	@Column(name = "COMPLEMENTO")
-	private String complemento;
+  @Size(max = 150)
+  @Column(name = "COMPLEMENTO")
+  private String complemento;
 
-	@NotBlank
-	@Size(min = 3, max = 50)
-	@Column(name = "CIDADE")
-	private String cidade;
+  @NotBlank
+  @Size(min = 3, max = 50)
+  @Column(name = "CIDADE")
+  private String cidade;
 
-	public String getRua() {
-		return rua;
-	}
+  public Endereco() {
+    super();
+  }
 
-	public void setRua(String rua) {
-		this.rua = rua;
-	}
+  public Endereco(String rua, String cep, String bairro, String complemento, String cidade) {
+    super();
+    this.rua = rua;
+    this.cep = cep;
+    this.bairro = bairro;
+    this.complemento = complemento;
+    this.cidade = cidade;
+  }
 
-	public String getCep() {
-		return cep;
-	}
+  public String getRua() {
+    return rua;
+  }
 
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
+  public void setRua(String rua) {
+    this.rua = rua;
+  }
 
-	public String getBairro() {
-		return bairro;
-	}
+  public String getCep() {
+    return cep;
+  }
 
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
+  public void setCep(String cep) {
+    this.cep = cep;
+  }
 
-	public String getComplemento() {
-		return complemento;
-	}
+  public String getBairro() {
+    return bairro;
+  }
 
-	public void setComplemento(String complemento) {
-		this.complemento = complemento;
-	}
+  public void setBairro(String bairro) {
+    this.bairro = bairro;
+  }
 
-	public String getCidade() {
-		return cidade;
-	}
+  public String getComplemento() {
+    return complemento;
+  }
 
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
+  public void setComplemento(String complemento) {
+    this.complemento = complemento;
+  }
+
+  public String getCidade() {
+    return cidade;
+  }
+
+  public void setCidade(String cidade) {
+    this.cidade = cidade;
+  }
 
 }

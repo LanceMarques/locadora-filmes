@@ -1,5 +1,16 @@
 package com.locadora.infra.enums;
 
 public enum StatusLocacao {
-	aberto,finalizado
+  ABERTO("aberto"), FINALIZADO("finalizado");
+  
+  private final String status;
+  
+  StatusLocacao(String status) {
+    this.status=status;
+  }
+  
+  public String getStatus() {
+    return this.status;
+  }
+  
 }
