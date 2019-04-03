@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
 
 @RestController
 @RequestMapping("/locacoes")
@@ -32,7 +33,19 @@ public class LocacaoController {
     Locacao locacaoSalva = this.locacaoService.buscarPorId(id);
     return ResponseEntity.status(HttpStatus.OK).body(locacaoSalva);
   }
-
+  @GetMapping("/{id}/filmes")
+  public ResponseEntity<List<LocacaoTemFilme>> listarFilmesPorId(@PathVariable Integer id) {
+    List<LocacaoTemFilme> filmesDaLocacao = this.locacaoService.listarFilmes(id);
+    return ResponseEntity.status(HttpStatus.OK).body(filmesDaLocacao);
+  }
+  
+  @GetMapping("/status/{statusLocacao}")
+  public ResponseEntity<List<Locacao>> listarPorStatus(@PathVariable String statusLocacao) {
+    
+    List<Locacao> locacoes = this.locacaoService.listarPorStatus(statusLocacao);
+    return ResponseEntity.status(HttpStatus.OK).body(locacoes);
+  }
+  
   @PostMapping
   public ResponseEntity<Locacao> criar(@Valid @RequestBody Locacao locacao) {
     Locacao locacaoSalva = locacaoService.criar(locacao);
@@ -45,9 +58,9 @@ public class LocacaoController {
     return ResponseEntity.status(HttpStatus.OK).body(locacaoAtualizada);
   }
 
-  @PutMapping("/devolucao/{id}")
+  @PutMapping("/{id}/devolucao")
   public ResponseEntity<Locacao> devolverLocacao(@PathVariable Integer id){
-    this.locacaoService.devolverLocacao(Integer id);
+    this.locacaoService.devolverLocacao(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
   

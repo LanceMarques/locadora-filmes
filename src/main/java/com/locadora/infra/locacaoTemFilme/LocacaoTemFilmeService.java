@@ -67,9 +67,11 @@ public class LocacaoTemFilmeService {
     List<Filme> filmesDevolvidos = new ArrayList<>();
 
     for (LocacaoTemFilme filmeLocado : filmesLocados) {
+      System.out.println("ESTOQUE 1 ="+filmeLocado.getFilme().getQuantidadeEstoque());
       filmeId = filmeLocado.getFilme().getId();
       qtdDevolvida = filmeLocado.getQuantidadeLocada();
       filmeDevolvido = this.filmeService.buscarAcrescentarEstoque(filmeId, qtdDevolvida);
+      System.out.println("ESTOQUE 2 ="+filmeDevolvido.getQuantidadeEstoque());
       filmesDevolvidos.add(filmeDevolvido);
     }
     this.filmeService.salvarTodos(filmesDevolvidos);

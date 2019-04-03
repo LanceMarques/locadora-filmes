@@ -23,6 +23,7 @@ public class Filme {
 
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
+  @Column(name="ID")
   private Integer id;
 
   @NotBlank
@@ -59,7 +60,7 @@ public class Filme {
   private Double valorDiaria;
 
   @NotNull
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne()
   @JoinColumn(name = "GENERO_ID")
   private Genero genero;
 

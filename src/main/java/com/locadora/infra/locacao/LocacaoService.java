@@ -12,6 +12,7 @@ import com.locadora.infra.locacao.exceptions.LocacaoLimiteDeFilmesException;
 import com.locadora.infra.locacao.exceptions.LocacaoNaoEncontradaException;
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilmeService;
+import com.locadora.utils.DataUtils;
 
 @Service
 public class LocacaoService {
@@ -34,14 +35,24 @@ public class LocacaoService {
     }
     return locacaoOpt.get();
   }
+  
+  public List<LocacaoTemFilme> listarFilmes(Integer id) {
+    Locacao locacaoSalva = this.buscarPorId(id);
+    return locacaoSalva.getFilmes();
+  }
 
+  public List<Locacao> listarPorStatus(String statusLocacao) {
+    StatusLocacao status = StatusLocacao.valueOf(statusLocacao);
+    return this.locacaoRepository.findByStatus(status);
+  }
+  
   public List<Locacao> buscarPorCliente(Cliente cliente) {
     return this.locacaoRepository.findByCliente(cliente);
   }
 
   public Locacao criar(Locacao locacao) {
 
-    Locacao locacaoSalva = emprestarFilmes(locacao);
+    Locacao locacaoSalva = locarFilmes(locacao);
     return this.locacaoRepository.save(locacaoSalva);
 
   }
@@ -54,8 +65,22 @@ public class LocacaoService {
   
   public void devolverLocacao(Integer id) {
     Locacao locacaoSalva = this.buscarPorId(id);
-    devolverFilmes(locacaoSalva);
+    this.devolverFilmes(locacaoSalva);
+    locacaoSalva.setDataDevolucao(DataUtils.gerarDataAtual());
     locacaoSalva.setStatus(StatusLocacao.FINALIZADO);
+    locacaoSalva.setValorTotal(calcularValorTotal(locacaoSalva));
+    this.locacaoRepository.save(locacaoSalva);
+  }
+  
+  public Double calcularValorTotal(Locacao locacao) {
+    Long intervaloMilis = locacao.getDataDevolucao().getTime()-locacao.getDataRealizacao().getTime();
+    Long intervaloDias =1+ intervaloMilis/(1000*60*60*24);
+    double totalFilmes=0;
+    for (LocacaoTemFilme locacaoTemfilme: locacao.getFilmes()) {
+      totalFilmes+=locacaoTemfilme.getValorTotalDaDiaria();
+    }
+    Double valorTotal =totalFilmes*intervaloDias;
+    return valorTotal;
   }
   
   public void excluir(Integer id) {
@@ -64,12 +89,14 @@ public class LocacaoService {
     this.locacaoRepository.deleteById(locacaoSalva.getId());
   }
 
-  private Locacao emprestarFilmes(Locacao locacao) {
+  private Locacao locarFilmes(Locacao locacao) {
     List<LocacaoTemFilme> filmesLocados = locacao.getFilmes();  
     final Cliente clienteValido = buscarClienteValido(locacao);
 
-    locacao.getFilmes().clear();
+    locacao.setFilmes(null);
     locacao.setCliente(clienteValido);
+    locacao.setStatus(StatusLocacao.ABERTO);
+    locacao.setDataRealizacao(DataUtils.gerarDataAtual());
     
     Locacao locacaoSalva = this.locacaoRepository.save(locacao);
 

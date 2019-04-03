@@ -30,15 +30,14 @@ public class Locacao {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
-  @DateTimeFormat(pattern = "dd/MM/yyyy")
+  @DateTimeFormat(pattern="yyyy-MM-dd")
   @Column(name = "DATA_REALIZACAO")
   private Date dataRealizacao;
 
-  @DateTimeFormat(pattern = "dd/MM/yyyy")
+  @DateTimeFormat(pattern="yyyy-MM-dd")
   @Column(name = "DATA_DEVOLUCAO")
   private Date dataDevolucao;
 
-  @NotNull
   @Enumerated(EnumType.STRING)
   @Column(name = "STATUS")
   private StatusLocacao status;
@@ -59,7 +58,7 @@ public class Locacao {
   }
 
   public Locacao(Integer id, Date dataRealizacao, Date dataDevolucao, StatusLocacao status,
-      Double valorTotal, @NotNull Cliente cliente, List<LocacaoTemFilme> filmes) {
+      Double valorTotal, Cliente cliente, List<LocacaoTemFilme> filmes) {
     super();
     this.id = id;
     this.dataRealizacao = dataRealizacao;
