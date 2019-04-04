@@ -75,21 +75,24 @@ public class FilmeService {
   }
 
   public Filme atualizar(Integer id, Filme filme) {
-    Filme filmesalvo = buscarPorId(id);
-    BeanUtils.copyProperties(filme, filmesalvo, "id");
-    return this.filmeRepository.save(filmesalvo);
+    Filme filmeSalvo = buscarPorId(id);
+    //verificarLocacaoAssociada(filmeSalvo);
+    BeanUtils.copyProperties(filme, filmeSalvo, "id");
+    return this.filmeRepository.save(filmeSalvo);
   }
 
   public void excluir(Integer id) {
     final Filme filmeSalvo = buscarPorId(id);
-    
+    verificarLocacaoAssociada(filmeSalvo);
+    this.filmeRepository.deleteById(filmeSalvo.getId());
+  }
+
+  private void verificarLocacaoAssociada(final Filme filmeSalvo) {
     final List<LocacaoTemFilme> locacoesAssociadas;
-    
     locacoesAssociadas = this.locacaoTemFilmeService.listarPorFilme(filmeSalvo);
     if(!locacoesAssociadas.isEmpty()) {
       throw new LocacaoAssociadaException();
     }
-    this.filmeRepository.deleteById(filmeSalvo.getId());
   }
   
   

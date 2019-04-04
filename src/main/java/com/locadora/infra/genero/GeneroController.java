@@ -48,10 +48,10 @@ public class GeneroController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Genero> atualizar(@PathVariable("id") Integer id,
+  public ResponseEntity<?> atualizar(@PathVariable("id") Integer id,
       @Valid @RequestBody Genero genero) {
-    final Genero generoAtualizado = this.generoService.atualizar(id, genero);
-    return ResponseEntity.status(HttpStatus.OK).body(generoAtualizado);
+    this.generoService.atualizar(id, genero);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 
   @DeleteMapping("/{id}")

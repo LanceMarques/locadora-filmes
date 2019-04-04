@@ -23,8 +23,8 @@ public class LocacaoController {
   private LocacaoService locacaoService;
 
   @GetMapping
-  public ResponseEntity<List<Locacao>> listarTodas() {
-    List<Locacao> locacoes = this.locacaoService.listarTodos();
+  public ResponseEntity<List<Locacao>> listarTodas(LocacaoFilter filter) {
+    List<Locacao> locacoes = this.locacaoService.pesquisar(filter);
     return ResponseEntity.status(HttpStatus.OK).body(locacoes);
   }
 
@@ -39,10 +39,9 @@ public class LocacaoController {
     return ResponseEntity.status(HttpStatus.OK).body(filmesDaLocacao);
   }
   
-  @GetMapping("/status/{statusLocacao}")
-  public ResponseEntity<List<Locacao>> listarPorStatus(@PathVariable String statusLocacao) {
-    
-    List<Locacao> locacoes = this.locacaoService.listarPorStatus(statusLocacao);
+  @GetMapping("/cliente/cpf/{cpf}")
+  public ResponseEntity<List<Locacao>> listarPorCliente(@PathVariable String cpf) {
+    List<Locacao> locacoes = this.locacaoService.listarPorCPF(cpf);
     return ResponseEntity.status(HttpStatus.OK).body(locacoes);
   }
   

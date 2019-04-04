@@ -48,10 +48,10 @@ public class FilmeController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Filme> atualizar(@PathVariable("id") Integer id,
+  public ResponseEntity<?> atualizar(@PathVariable("id") Integer id,
       @Valid @RequestBody Filme filme) {
-    final Filme filmeAtualizado = this.filmeService.atualizar(id, filme);
-    return ResponseEntity.status(HttpStatus.OK).body(filmeAtualizado);
+    this.filmeService.atualizar(id, filme);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 
   @DeleteMapping("/{id}")

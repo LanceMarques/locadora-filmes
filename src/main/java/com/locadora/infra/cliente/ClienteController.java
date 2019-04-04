@@ -54,12 +54,11 @@ public class ClienteController {
     return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
   }
 
-  //TODO Alterar response entity das atualizações, retornando status NO_CONTENT
   @PutMapping("/{id}")
-  public ResponseEntity<Cliente> atualizar(@PathVariable("id") Integer id,
+  public ResponseEntity<?> atualizar(@PathVariable("id") Integer id,
       @Valid @RequestBody Cliente cliente) {
-    final Cliente clienteSalvo = this.clienteService.atualizar(id, cliente);
-    return ResponseEntity.status(HttpStatus.OK).body(clienteSalvo);
+    this.clienteService.atualizar(id, cliente);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 
   @DeleteMapping("/{id}")

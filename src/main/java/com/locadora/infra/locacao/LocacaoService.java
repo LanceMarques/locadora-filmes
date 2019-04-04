@@ -23,48 +23,50 @@ public class LocacaoService {
   private ClienteService clienteService;
   @Autowired
   private LocacaoTemFilmeService locacaoTemFilmeService;
-
-  public List<Locacao> listarTodos() {
-    return this.locacaoRepository.findAll();
+  
+  public List<Locacao> pesquisar(LocacaoFilter filter){
+    return this.locacaoRepository.filtrar(filter);
   }
-
+  
   public Locacao buscarPorId(Integer id) {
-    Optional<Locacao> locacaoOpt = locacaoRepository.findById(id);
+    final Optional<Locacao> locacaoOpt = locacaoRepository.findById(id);
     if (!locacaoOpt.isPresent()) {
       throw new LocacaoNaoEncontradaException();
     }
     return locacaoOpt.get();
   }
   
+
+  public List<Locacao> listarPorCPF(String cpf){
+    final Cliente clienteSalvo = this.clienteService.buscarClientePorCpf(cpf);
+    final List<Locacao> locacoes = this.listarPendenciasDoCliente(clienteSalvo);
+    return locacoes;
+  }
+
+  private List<Locacao> listarPendenciasDoCliente(Cliente clienteSalvo) {
+    final List<Locacao> locacoes = this.locacaoRepository.findByCliente(clienteSalvo);
+    locacoes.removeIf(locacao->locacao.getStatus()==StatusLocacao.FINALIZADO);
+    return locacoes;
+  }
+  
   public List<LocacaoTemFilme> listarFilmes(Integer id) {
     Locacao locacaoSalva = this.buscarPorId(id);
     return locacaoSalva.getFilmes();
   }
-
-  public List<Locacao> listarPorStatus(String statusLocacao) {
-    StatusLocacao status = StatusLocacao.valueOf(statusLocacao);
-    return this.locacaoRepository.findByStatus(status);
-  }
   
-  public List<Locacao> buscarPorCliente(Cliente cliente) {
-    return this.locacaoRepository.findByCliente(cliente);
-  }
-
   public Locacao criar(Locacao locacao) {
-
-    Locacao locacaoSalva = locarFilmes(locacao);
+    final Locacao locacaoSalva = locarFilmes(locacao);
     return this.locacaoRepository.save(locacaoSalva);
-
   }
 
   public Locacao atualizar(Integer id, Locacao locacao) {
-    Locacao locacaoSalva = buscarPorId(id);
+    final Locacao locacaoSalva = buscarPorId(id);
     BeanUtils.copyProperties(locacao, locacaoSalva, "id");
     return locacaoRepository.save(locacaoSalva);
   }
   
   public void devolverLocacao(Integer id) {
-    Locacao locacaoSalva = this.buscarPorId(id);
+    final Locacao locacaoSalva = this.buscarPorId(id);
     this.devolverFilmes(locacaoSalva);
     locacaoSalva.setDataDevolucao(DataUtils.gerarDataAtual());
     locacaoSalva.setStatus(StatusLocacao.FINALIZADO);
@@ -73,24 +75,25 @@ public class LocacaoService {
   }
   
   public Double calcularValorTotal(Locacao locacao) {
-    Long intervaloMilis = locacao.getDataDevolucao().getTime()-locacao.getDataRealizacao().getTime();
-    Long intervaloDias =1+ intervaloMilis/(1000*60*60*24);
+    final Long intervaloMilis = locacao.getDataDevolucao().getTime()-locacao.getDataRealizacao().getTime();
+    final Long intervaloDias =1+ intervaloMilis/(1000*60*60*24);
     double totalFilmes=0;
     for (LocacaoTemFilme locacaoTemfilme: locacao.getFilmes()) {
       totalFilmes+=locacaoTemfilme.getValorTotalDaDiaria();
     }
-    Double valorTotal =totalFilmes*intervaloDias;
+    final Double valorTotal =totalFilmes*intervaloDias;
     return valorTotal;
   }
   
   public void excluir(Integer id) {
-    Locacao locacaoSalva = this.buscarPorId(id);
+    final Locacao locacaoSalva = this.buscarPorId(id);
     devolverFilmes(locacaoSalva);
     this.locacaoRepository.deleteById(locacaoSalva.getId());
   }
 
   private Locacao locarFilmes(Locacao locacao) {
-    List<LocacaoTemFilme> filmesLocados = locacao.getFilmes();  
+    
+    List<LocacaoTemFilme> filmesLocados = this.locacaoTemFilmeService.verificaFilmes(locacao.getFilmes());
     final Cliente clienteValido = buscarClienteValido(locacao);
 
     locacao.setFilmes(null);
@@ -104,21 +107,22 @@ public class LocacaoService {
 
     locacaoSalva.setFilmes(filmesLocados);
     return locacaoSalva;
+            
   }
   
   private void devolverFilmes(Locacao locacaoSalva) {
-    List<LocacaoTemFilme> filmesDevolvidos = locacaoSalva.getFilmes();
+    final List<LocacaoTemFilme> filmesDevolvidos = locacaoSalva.getFilmes();
     this.locacaoTemFilmeService.devolverAoEstoque(filmesDevolvidos);
   }
   
-  public Cliente buscarClienteValido(Locacao locacao) {
-    Integer clienteId = locacao.getCliente().getId();
+  private Cliente buscarClienteValido(Locacao locacao) {
+    final Integer clienteId = locacao.getCliente().getId();
 
-    Integer filmesNaLocacao;
-    Integer filmesComCliente;
+    final Integer filmesNaLocacao;
+    final Integer filmesComCliente;
 
-    Cliente clienteSalvo = clienteService.buscarPorId(clienteId);
-    List<Locacao> locacoesDoCliente = buscarPorCliente(clienteSalvo);
+    final Cliente clienteSalvo = clienteService.buscarPorId(clienteId);
+    final List<Locacao> locacoesDoCliente = this.listarPendenciasDoCliente(clienteSalvo); 
 
     filmesNaLocacao = locacaoTemFilmeService.contarFilmes(locacao.getFilmes());
     filmesComCliente = locacaoTemFilmeService.contarFilmesNasLocacoes(locacoesDoCliente);

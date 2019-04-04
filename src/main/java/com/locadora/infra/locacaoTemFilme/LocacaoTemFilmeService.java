@@ -36,29 +36,50 @@ public class LocacaoTemFilmeService {
 
   public List<LocacaoTemFilme> associarFilmes(List<LocacaoTemFilme> filmesLocados,
       Locacao locacao) {
-    Integer filmeId;
-    Integer qtdLocada;
-    Filme filmeSalvo;
-    LocacaoTemFilme filmeLocado;
-
+    
+    int qtdEstoque;
+    Filme filmeDaLocacao;
+    
     List<LocacaoTemFilme> filmes = new ArrayList<>();
     List<Filme> filmesDasLocacoes = new ArrayList<>();
 
-    for (LocacaoTemFilme locacaoTemFilme : filmesLocados) {
-      filmeId = locacaoTemFilme.getFilme().getId();
-      qtdLocada = locacaoTemFilme.getQuantidadeLocada();
-
-      filmeSalvo = this.filmeService.buscarReduzirEstoque(filmeId, qtdLocada);
-
-      filmeLocado = new LocacaoTemFilme(locacao, filmeSalvo, qtdLocada);
+    for (LocacaoTemFilme filmeLocado : filmesLocados) {
+      
+      qtdEstoque = filmeLocado.getQuantidadeLocada();
+      filmeDaLocacao = filmeLocado.getFilme();
+          
+      filmeLocado = new LocacaoTemFilme(locacao,filmeDaLocacao,qtdEstoque);
       filmeLocado.setValorTotalDaDiaria(this.calcularValorTotalDiaria(filmeLocado));
 
-      filmesDasLocacoes.add(filmeSalvo);
+      filmesDasLocacoes.add(filmeLocado.getFilme());
       filmes.add(filmeLocado);
     }
     this.filmeService.salvarTodos(filmesDasLocacoes);
     return filmes;
   }
+  
+  public List<LocacaoTemFilme> verificaFilmes(List<LocacaoTemFilme> filmesLocados){
+
+    Integer filmeId;
+    Integer qtdLocada;
+    Filme filmeSalvo;
+
+    List<LocacaoTemFilme> filmes = new ArrayList<>();
+    
+    for (LocacaoTemFilme filmeLocado : filmesLocados) {
+      filmeId = filmeLocado.getFilme().getId();
+      qtdLocada = filmeLocado.getQuantidadeLocada();
+
+      filmeSalvo = this.filmeService.buscarReduzirEstoque(filmeId, qtdLocada);
+
+      filmeLocado.setFilme(filmeSalvo);
+      filmeLocado.setValorTotalDaDiaria(calcularValorTotalDiaria(filmeLocado));
+
+      filmes.add(filmeLocado);
+    }
+    return filmes;    
+  }
+  
 
   public void devolverAoEstoque(List<LocacaoTemFilme> filmesLocados) {
     Filme filmeDevolvido;
@@ -67,11 +88,9 @@ public class LocacaoTemFilmeService {
     List<Filme> filmesDevolvidos = new ArrayList<>();
 
     for (LocacaoTemFilme filmeLocado : filmesLocados) {
-      System.out.println("ESTOQUE 1 ="+filmeLocado.getFilme().getQuantidadeEstoque());
       filmeId = filmeLocado.getFilme().getId();
       qtdDevolvida = filmeLocado.getQuantidadeLocada();
       filmeDevolvido = this.filmeService.buscarAcrescentarEstoque(filmeId, qtdDevolvida);
-      System.out.println("ESTOQUE 2 ="+filmeDevolvido.getQuantidadeEstoque());
       filmesDevolvidos.add(filmeDevolvido);
     }
     this.filmeService.salvarTodos(filmesDevolvidos);

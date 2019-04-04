@@ -1,6 +1,7 @@
 package com.locadora.infra.locacao;
 
 import java.sql.Date;
+import com.locadora.infra.enums.StatusLocacao;
 
 public class LocacaoFilter {
  
@@ -9,6 +10,8 @@ public class LocacaoFilter {
   
   private Date dataDevolucaoDe;
   private Date dataDevolucaoAte;
+  
+  private StatusLocacao statusLocacao;
   
   public Date getDataRealizacaoDe() {
     return dataRealizacaoDe;
@@ -33,6 +36,12 @@ public class LocacaoFilter {
   }
   public void setDataDevolucaoAte(Date dataDevolucaoAte) {
     this.dataDevolucaoAte = dataDevolucaoAte;
+  }
+  public StatusLocacao getStatusLocacao() {
+    return statusLocacao;
+  }
+  public void setStatusLocacao(StatusLocacao statusLocacao) {
+    this.statusLocacao = statusLocacao;
   }
   
   
