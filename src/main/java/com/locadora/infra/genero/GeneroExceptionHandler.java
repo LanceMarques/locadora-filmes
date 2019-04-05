@@ -15,6 +15,13 @@ import com.locadora.infra.genero.exceptions.FilmeAssociadoException;
 import com.locadora.infra.genero.exceptions.GeneroJaCadastradoException;
 import com.locadora.infra.genero.exceptions.GeneroNaoEncontradoException;
 
+/**
+ * Classe responsavel por lidar com as excecoes lancadas pelo service da entidade Genero
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @ControllerAdvice
 public class GeneroExceptionHandler extends ResponseEntityExceptionHandler {
 

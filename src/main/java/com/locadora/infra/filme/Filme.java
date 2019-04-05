@@ -16,13 +16,20 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import com.locadora.infra.genero.Genero;
 
+/**
+ * Classe responsavel por modelar e mapear os atributos e relacionamentos da entidade Filme
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @Entity
 @Table(name = "FILME")
 public class Filme {
 
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
-  @Column(name="ID")
+  @Column(name = "ID")
   private Integer id;
 
   @NotBlank
@@ -59,7 +66,7 @@ public class Filme {
   private Double valorDiaria;
 
   @NotNull
-  @ManyToOne(cascade=CascadeType.MERGE)
+  @ManyToOne(cascade = CascadeType.MERGE)
   @JoinColumn(name = "GENERO_ID")
   private Genero genero;
 
@@ -67,8 +74,8 @@ public class Filme {
     super();
   }
 
-  public Filme(Integer id, String titulo, Integer duracao, Integer quantidadeEstoque, String sinopse,
-      String nomeDiretor, Double valorDiaria, Genero genero) {
+  public Filme(Integer id, String titulo, Integer duracao, Integer quantidadeEstoque,
+      String sinopse, String nomeDiretor, Double valorDiaria, Genero genero) {
     super();
     this.id = id;
     this.titulo = titulo;

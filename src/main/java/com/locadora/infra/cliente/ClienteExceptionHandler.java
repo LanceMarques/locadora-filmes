@@ -13,6 +13,13 @@ import com.locadora.handler.Erro;
 import com.locadora.infra.cliente.exceptions.ClienteNaoEncontradoException;
 import com.locadora.infra.cliente.exceptions.CpfJaCadastradoException;
 
+/**
+ * Classe responsavel por lidar com as excecoes lancadas pelo service da entidade Cliente
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @ControllerAdvice
 public class ClienteExceptionHandler {
 

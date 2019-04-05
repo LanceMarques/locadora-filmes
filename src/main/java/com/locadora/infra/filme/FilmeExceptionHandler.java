@@ -11,10 +11,16 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.locadora.handler.Erro;
 import com.locadora.infra.filme.exceptions.FilmeEstoqueIndisponivelException;
-import com.locadora.infra.filme.exceptions.FilmeJaCadastradoException;
 import com.locadora.infra.filme.exceptions.FilmeNaoEncontradoException;
 import com.locadora.infra.filme.exceptions.LocacaoAssociadaException;
 
+/**
+ * Classe responsavel por lidar com as excecoes lancadas pelo service da entidade Filme
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @ControllerAdvice
 public class FilmeExceptionHandler {
 
@@ -25,15 +31,6 @@ public class FilmeExceptionHandler {
   public ResponseEntity<Object> handleFilmeNaoEncontradoException(FilmeNaoEncontradoException ex) {
     final String mensagemUsr =
         messageSource.getMessage("filme-nao-encontrado", null, LocaleContextHolder.getLocale());
-    final String mensagemDev = ex.toString();
-    final List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erros);
-  }
-
-  @ExceptionHandler({FilmeJaCadastradoException.class})
-  public ResponseEntity<Object> handleFilmeJaCadastradoException(FilmeJaCadastradoException ex) {
-    final String mensagemUsr =
-        messageSource.getMessage("filme-ja-cadastrado", null, LocaleContextHolder.getLocale());
     final String mensagemDev = ex.toString();
     final List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erros);

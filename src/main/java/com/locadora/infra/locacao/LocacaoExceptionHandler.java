@@ -13,6 +13,13 @@ import com.locadora.handler.Erro;
 import com.locadora.infra.locacao.exceptions.LocacaoLimiteDeFilmesException;
 import com.locadora.infra.locacao.exceptions.LocacaoNaoEncontradaException;
 
+/**
+ * Classe responsavel por lidar com as excecoes lancadas pelo service da entidade Locacao
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @ControllerAdvice
 public class LocacaoExceptionHandler {
 

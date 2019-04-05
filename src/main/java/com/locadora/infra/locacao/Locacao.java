@@ -22,6 +22,13 @@ import com.locadora.infra.cliente.Cliente;
 import com.locadora.infra.enums.StatusLocacao;
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
 
+/**
+ * Classe responsavel por modelar e mapear os atributos e relacionamentos da entidade Locacao
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @Entity
 @Table(name = "LOCACAO")
 public class Locacao {

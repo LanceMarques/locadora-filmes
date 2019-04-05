@@ -12,6 +12,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
 
+/**
+ * Classe responsavel por modelar e mapear os atributos da entidade Cliente
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @Entity
 @Table(name = "CLIENTE")
 public class Cliente {

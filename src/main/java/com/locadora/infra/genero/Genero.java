@@ -9,12 +9,19 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * Classe responsavel por modelar e mapear os atributos da entidade Genero
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @Entity
 @Table(name = "GENERO")
 public class Genero {
-  
+
   @Id
-  @Column(name="ID")
+  @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
