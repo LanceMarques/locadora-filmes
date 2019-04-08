@@ -14,6 +14,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.locadora.infra.filme.Filme;
 import com.locadora.infra.locacao.Locacao;
 
+/**
+ * Classe responsavel por relacionar as {@link Locacao locacoes} aos {@link Filme filmes} locados.
+ * 
+ * @version 1.0.0 Abril/2019
+ * @author Luis Lancellote
+ * @since 1.0.0
+ */
 @Entity(name = "LocacaoTemFilme")
 @Table(name = "LOCACAO_TEM_FILME")
 public class LocacaoTemFilme {

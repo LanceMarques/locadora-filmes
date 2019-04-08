@@ -1,8 +1,10 @@
 package com.locadora.infra.locacao;
 
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.locadora.event.RecursoCriadoEvent;
 import com.locadora.infra.filme.Filme;
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
 
@@ -30,6 +33,9 @@ public class LocacaoController {
   @Autowired
   private LocacaoService locacaoService;
 
+  @Autowired
+  private ApplicationEventPublisher publisher;
+  
   /**
    * Metodo responsavel por fornecer uma lista com todas as {@link Locacao locacoes} cadastradas no
    * sistema
@@ -45,7 +51,7 @@ public class LocacaoController {
   /**
    * Metodo responsavel por fornecer uma {@link Locacao locacao} que possui o id informado.
    * 
-   * @param id ({@link Integer}) Id requisitado na pesquisa
+   * @param id {@link Integer} Id requisitado na pesquisa
    * @return {@link ResponseEntity} com o filme que possui o id informado.
    * 
    * @since 1.0.0
@@ -60,7 +66,7 @@ public class LocacaoController {
    * Metodo responsavel por fornecer uma lista de filmes{@link Filme} de uma locacao{@link Locacao}
    * que possua o id informado
    * 
-   * @param id ({@link Integer}) Id requisitado na pesquisa
+   * @param id {@link Integer} Id requisitado na pesquisa
    * @return {@link ResponseEntity} com a lista de filmes da locacao solicitada
    * 
    * @since 1.0.0
@@ -95,8 +101,9 @@ public class LocacaoController {
    * @since 1.0.0
    */
   @PostMapping
-  public ResponseEntity<Locacao> criar(@Valid @RequestBody Locacao locacao) {
+  public ResponseEntity<Locacao> criar(@Valid @RequestBody Locacao locacao, HttpServletResponse response) {
     Locacao locacaoSalva = locacaoService.criar(locacao);
+    publisher.publishEvent(new RecursoCriadoEvent(this, response, locacao.getId()));
     return ResponseEntity.status(HttpStatus.CREATED).body(locacaoSalva);
   }
 
@@ -120,7 +127,7 @@ public class LocacaoController {
   /**
    * Metodo responsavel por efetivar a devolução de uma locacao que possui o id recebido como parametro 
    * 
-   * @param id ({@link Integer}) Id da locacao a ser devolvida.
+   * @param id {@link Integer} Id da locacao a ser devolvida.
    * 
    * @return {@link ResponseEntity} sem conteudo.
    * 
@@ -136,7 +143,7 @@ public class LocacaoController {
   /**
    * Metodo responsavel por excluir uma {@link Locacao locacao} que possui o id informado.
    * 
-   * @param id ({@link Integer}) Id da locacao a ser excluido. 
+   * @param id {@link Integer} Id da locacao a ser excluido. 
    * @return {@link ResponseEntity} sem conteudo.
    * 
    * @since 1.0.0

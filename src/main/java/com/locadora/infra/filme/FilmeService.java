@@ -45,7 +45,7 @@ public class FilmeService {
    * Metodo responsavel por fornecer uma lista com todos os {@link Filme filmes} cadastrados no
    * sistema, que possuam o genero recebido como parametro
    * 
-   * @return Lista com todos os {@link Filme filmes} cadastrados
+   * @return {@link List Lista} com todos os {@link Filme filmes} cadastrados
    */
   public List<Filme> listarPorGenero(Genero genero) {
     return this.filmeRepository.findByGenero(genero);
@@ -54,8 +54,8 @@ public class FilmeService {
   /**
    * Metodo responsavel por fornecer um {@link Filme filme} que possui o id informado.
    * 
-   * @param id ({@link Integer}) Id requisitado na pesquisa
-   * @return Filme{@link Filme}} que possui o id informado.
+   * @param id ({@link Integer}) Id requisitado na pesquisa.
+   * @return {@link Optional Optional} contendo um {@link Filme filme} com o id pesquisado.
    * 
    * @since 1.0.0
    */
@@ -140,7 +140,7 @@ public class FilmeService {
   /**
    * Metodo responsavel por salvar uma lista de {@link Filme filmes} recebida como parametro
    * 
-   * @param filmes ({@link Filme}) Lista de filmes que serao salvos
+   * @param filmes {@link List} Lista de {@link Filme filmes} que serao salvos
    */
   public void salvarTodos(List<Filme> filmes) {
     this.filmeRepository.saveAll(filmes);
@@ -150,7 +150,7 @@ public class FilmeService {
    * Metodo responsavel por atualizar um {@link Filme filme} que possui o id solicitado com os dados
    * recebidos no corpo da requisicao.
    * 
-   * @param id ({@link Integer}) Id do filme a ser atualizado.
+   * @param id {@link Integer} Id do filme a ser atualizado.
    * @param filme {@link Filme} Dados atualizados.
    * 
    * @since 1.0.0
@@ -164,7 +164,7 @@ public class FilmeService {
   /**
    * Metodo responsavel por excluir um {@link Filme filme} que possui o id informado.
    * 
-   * @param id ({@link Integer}) Id do filme a ser excluido.
+   * @param id {@link Integer} Id do filme a ser excluido.
    * 
    * @since 1.0.0
    */
@@ -178,7 +178,7 @@ public class FilmeService {
    * Metodo responsavel por verificar se há alguma locacao associada ao filme recebido como
    * parametro
    * 
-   * @param filme ({@link Filme}) Filme recebido como parametro para consulta
+   * @param filme {@link Filme} Filme recebido como parametro para consulta
    * 
    * @since 1.0.0
    */

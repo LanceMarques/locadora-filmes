@@ -28,8 +28,18 @@ public class GeneroExceptionHandler extends ResponseEntityExceptionHandler {
   @Autowired
   private MessageSource messageSource;
 
+  /**
+   * Metodo que trata a excecao lancada quando um {@link Genero genero} nao e encontrado
+   * 
+   * @param ex {@link GeneroNaoEncontradoException} Excecao
+   * 
+   * @return resposta para o cliente, informando o status NOT_FOUND, alem da mensagem para o
+   *         desenvolvedor do front-end (informacoes pertinentes sobre o erro ocorrido), bem como
+   *         mensagem para o usuario (validacao dos campos, mensagem alto nivel)
+   */
   @ExceptionHandler({GeneroNaoEncontradoException.class})
-  public ResponseEntity<Object> handleGeneroNaoEncontradoException(GeneroNaoEncontradoException ex) {
+  public ResponseEntity<Object> handleGeneroNaoEncontradoException(
+      GeneroNaoEncontradoException ex) {
     final String mensagemUsr =
         messageSource.getMessage("genero-nao-encontrado", null, LocaleContextHolder.getLocale());
     final String mensagemDev = ex.toString();
@@ -37,6 +47,16 @@ public class GeneroExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erros);
   }
 
+  /**
+   * Metodo que trata a excecao lancada quando um {@link Genero genero} a ser cadastrado ja existe
+   * no banco.
+   * 
+   * @param ex {@link GeneroJaCadastradoException} Excecao
+   * 
+   * @return resposta para o cliente, informando o status BAD_REQUEST, alem da mensagem para o
+   *         desenvolvedor do front-end (informacoes pertinentes sobre o erro ocorrido), bem como
+   *         mensagem para o usuario (validacao dos campos, mensagem alto nivel)
+   */
   @ExceptionHandler({GeneroJaCadastradoException.class})
   public ResponseEntity<Object> handleGeneroJaCadastradoException(GeneroJaCadastradoException ex) {
     final String mensagemUsr =
@@ -46,6 +66,16 @@ public class GeneroExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
   }
 
+  /**
+   * Metodo que trata a excecao lancada quando um {@link Genero genero} a ser excluido ainda esta
+   * associado a um filme.
+   * 
+   * @param ex {@link FilmeAssociadoException} Excecao
+   * 
+   * @return resposta para o cliente, informando o status BAD_REQUEST, alem da mensagem para o
+   *         desenvolvedor do front-end (informacoes pertinentes sobre o erro ocorrido), bem como
+   *         mensagem para o usuario (validacao dos campos, mensagem alto nivel)
+   */
   @ExceptionHandler({FilmeAssociadoException.class})
   public ResponseEntity<Object> handleFilmeAssociadoException(FilmeAssociadoException ex) {
     final String mensagemUsr =
