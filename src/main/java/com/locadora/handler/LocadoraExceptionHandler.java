@@ -64,10 +64,10 @@ public class LocadoraExceptionHandler extends ResponseEntityExceptionHandler {
    * Metodo que trata a excecao lancada quando o cliente envia uma requisicao contendo campos
    * obrigatorios vazios ou com tamanho minimo/maximo fora do permitido
    * 
-   * @param MethodArgumentNotValidException mensagem lancada pela excecao
-   * @param HttpHeaders cabecalho da requisicao
-   * @param HttpStatus status que deve ser retornado para o erro lancado
-   * @param WebRequest requisicao
+   * @param ex MethodArgumentNotValidException mensagem lancada pela excecao
+   * @param headers HttpHeaders cabecalho da requisicao
+   * @param status HttpStatus status que deve ser retornado para o erro lancado
+   * @param request WebRequest requisicao
    * @return resposta para o cliente, informando o status BAD_REQUEST, alem da mensagem para o
    *         desenvolvedor do front-end (informacoes pertinentes sobre o erro ocorrido), bem como
    *         mensagem para o usuario (validacao dos campos, mensagem alto nivel)
@@ -83,8 +83,8 @@ public class LocadoraExceptionHandler extends ResponseEntityExceptionHandler {
    * Metodo que trata a excecao lancada quando o cliente envia uma requisicao que viola as
    * integridades dos dados no banco de dados. Ex: Unique keys
    * 
-   * @param DataIntegrityViolationException mensagem lancada pela excecao
-   * @param WebRequest requisicao
+   * @param ex DataIntegrityViolationException mensagem lancada pela excecao
+   * @param request WebRequest requisicao
    * @return resposta para o cliente, informando o status BAD_REQUEST, alem da mensagem para o
    *         desenvolvedor do front-end (informacoes pertinentes sobre o erro ocorrido), bem como
    *         mensagem para o usuario (validacao dos campos, mensagem alto nivel)

@@ -90,7 +90,7 @@ public class FilmeService {
    * Metodo responsavel por buscar e reduzir o estoque de um {@link Filme filme} com base na
    * quantidade locada recebida como parametro.
    * 
-   * @param id ({@link Integer}) Id requisitado na pesquisa.
+   * @param filmeId ({@link Integer}) Id requisitado na pesquisa.
    * @param quantidadeLocada ({@link Integer}}) Quantidade de filmes na locacao.
    * @return Filme{@link Filme}} com a quantidade de estoque reduzida.
    * 
@@ -107,7 +107,7 @@ public class FilmeService {
    * Metodo responsavel por buscar um {@link Filme filme} e acrescentar a quantidade devolvida ao
    * estoque com base no parametro recebido.
    * 
-   * @param id ({@link Integer}) Id requisitado na pesquisa.
+   * @param filmeId {@link Integer} Id requisitado na pesquisa.
    * @param quantidadeDevolvida ({@link Integer}}) Quantidade de filmes devolvidos.
    * @return Filme{@link Filme}} com a quantidade de estoque reduzida.
    * 

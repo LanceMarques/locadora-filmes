@@ -14,7 +14,8 @@ import com.locadora.infra.cliente.exceptions.ClienteNaoEncontradoException;
 import com.locadora.infra.cliente.exceptions.CpfJaCadastradoException;
 
 /**
- * Classe responsavel por lidar com as excecoes lancadas pelo service da entidade Cliente
+ * Classe responsavel por lidar com as excecoes lancadas pelo service da
+ * entidade Cliente
  * 
  * @version 1.0.0 Abril/2019
  * @author Luis Lancellote
@@ -23,25 +24,24 @@ import com.locadora.infra.cliente.exceptions.CpfJaCadastradoException;
 @ControllerAdvice
 public class ClienteExceptionHandler {
 
-  @Autowired
-  private MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-  @ExceptionHandler({ClienteNaoEncontradoException.class})
-  public ResponseEntity<Object> handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {
-    final String mensagemUsr =
-        messageSource.getMessage("cliente-nao-encontrado", null, LocaleContextHolder.getLocale());
-    final String mensagemDev = ex.toString();
-    final List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erros);
-  }
+	@ExceptionHandler({ ClienteNaoEncontradoException.class })
+	public ResponseEntity<Object> handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {
+		final String mensagemUsr = messageSource.getMessage("cliente-nao-encontrado", null,
+				LocaleContextHolder.getLocale());
+		final String mensagemDev = ex.toString();
+		final List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erros);
+	}
 
-  @ExceptionHandler({CpfJaCadastradoException.class})
-  public ResponseEntity<Object> handleCpfJaCadastrado(CpfJaCadastradoException ex) {
-    final String mensagemUsr =
-        messageSource.getMessage("cpf-ja-cadastrado", null, LocaleContextHolder.getLocale());
-    final String mensagemDev = ex.toString();
-    final List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
-  }
+	@ExceptionHandler({ CpfJaCadastradoException.class })
+	public ResponseEntity<Object> handleCpfJaCadastrado(CpfJaCadastradoException ex) {
+		final String mensagemUsr = messageSource.getMessage("cpf-ja-cadastrado", null, LocaleContextHolder.getLocale());
+		final String mensagemDev = ex.toString();
+		final List<Erro> erros = Arrays.asList(new Erro(mensagemUsr, mensagemDev));
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
+	}
 
 }

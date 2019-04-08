@@ -57,8 +57,8 @@ public class GeneroService {
   /**
    * Metodo responsavel por cadastrar um genero recebido como parametro
    * 
-   * @param genero({@link Genero}) filme recebido como parametro para cadastro no sistema
-   * @return generoSalvo{@link Genero} genero{@link Genero} cadastrado no sistema.
+   * @param genero {@link Genero} filme recebido como parametro para cadastro no sistema
+   * @return generoSalvo {@link Genero} genero cadastrado no sistema.
    * 
    * @since 1.0.0
    */
@@ -75,7 +75,7 @@ public class GeneroService {
    * recebidos no corpo da requisicao.
    * 
    * @param id ({@link Integer}) Id do genero a ser atualizado.
-   * @param genero{@link Genero} Dados atualizados.
+   * @param genero {@link Genero} Dados atualizados.
    * 
    * @since 1.0.0
    */
