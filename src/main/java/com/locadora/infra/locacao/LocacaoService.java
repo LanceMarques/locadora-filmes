@@ -143,11 +143,11 @@ public class LocacaoService {
     final Long intervaloMilis =
         locacao.getDataDevolucao().getTime() - locacao.getDataRealizacao().getTime();
     final Long intervaloDias = 1 + intervaloMilis / (1000 * 60 * 60 * 24);
-    double totalFilmes = 0;
+    double diariasDosFilmes = 0;
     for (LocacaoTemFilme locacaoTemfilme : locacao.getFilmes()) {
-      totalFilmes += locacaoTemfilme.getValorTotalDaDiaria();
+      diariasDosFilmes += locacaoTemfilme.getValorTotalDaDiaria();
     }
-    final Double valorTotal = totalFilmes * intervaloDias;
+    final Double valorTotal = diariasDosFilmes * intervaloDias;
     return valorTotal;
   }
 
@@ -173,16 +173,17 @@ public class LocacaoService {
    */
   private Locacao locarFilmes(Locacao locacao) {
 
+	Locacao locacaoRealizada = locacao;
     List<LocacaoTemFilme> filmesLocados =
-        this.locacaoTemFilmeService.verificaFilmes(locacao.getFilmes());
-    final Cliente clienteValido = buscarClienteValido(locacao);
+        this.locacaoTemFilmeService.verificaFilmes(locacaoRealizada.getFilmes());
+    final Cliente clienteValido = buscarClienteValido(locacaoRealizada);
 
-    locacao.setFilmes(null);
-    locacao.setCliente(clienteValido);
-    locacao.setStatus(StatusLocacao.ABERTO);
-    locacao.setDataRealizacao(DataUtils.gerarDataAtual());
+    locacaoRealizada.setFilmes(null);
+    locacaoRealizada.setCliente(clienteValido);
+    locacaoRealizada.setStatus(StatusLocacao.ABERTO);
+    locacaoRealizada.setDataRealizacao(DataUtils.gerarDataAtual());
 
-    Locacao locacaoSalva = this.locacaoRepository.save(locacao);
+    Locacao locacaoSalva = this.locacaoRepository.save(locacaoRealizada);
 
     filmesLocados = locacaoTemFilmeService.associarFilmes(filmesLocados, locacaoSalva);
 
