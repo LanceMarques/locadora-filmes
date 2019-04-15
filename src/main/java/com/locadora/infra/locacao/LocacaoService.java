@@ -82,7 +82,7 @@ public class LocacaoService {
    * @return {@link List Lista} com todos os {@link LocacaoTemFilme filmes} de uma locacao.
    */
   public List<LocacaoTemFilme> listarFilmes(Integer id) {
-    Locacao locacaoSalva = this.buscarPorId(id);
+    final Locacao locacaoSalva = this.buscarPorId(id);
     return locacaoSalva.getFilmes();
   }
 
