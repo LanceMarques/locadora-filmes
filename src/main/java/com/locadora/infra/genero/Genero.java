@@ -36,8 +36,8 @@ public class Genero {
 
   public Genero(Integer id, String nome) {
     super();
-    this.id = id;
-    this.nome = nome;
+    this.setId(id);
+    this.setNome(nome);
   }
 
   public Integer getId() {

@@ -155,10 +155,10 @@ public class FilmeService {
    * 
    * @since 1.0.0
    */
-  public void atualizar(Integer id, Filme filme) {
+  public Filme atualizar(Integer id, Filme filme) {
     Filme filmeSalvo = buscarPorId(id);
     BeanUtils.copyProperties(filme, filmeSalvo, "id");
-    this.filmeRepository.save(filmeSalvo);
+    return this.filmeRepository.save(filmeSalvo);
   }
 
   /**

@@ -1,9 +1,10 @@
 package com.locadora.genero;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
@@ -13,8 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.Equals;
 import org.mockito.junit.MockitoJUnitRunner;
+import com.locadora.infra.filme.FilmeService;
 import com.locadora.infra.genero.Genero;
 import com.locadora.infra.genero.GeneroRepository;
 import com.locadora.infra.genero.GeneroService;
@@ -27,7 +28,10 @@ public class GeneroServiceTest {
 
   @Mock
   private GeneroRepository generoRepository;
-
+  
+  @Mock
+  private FilmeService filmeService;
+  
   @Before
   public void setUp() throws Exception {
 
@@ -87,7 +91,13 @@ public class GeneroServiceTest {
 
   @Test
   public void testExcluir() {
-
+    final Genero generoAExcluir = this.criarNovoGenero(1, "Terror");
+    when(this.filmeService.listarPorGenero(generoAExcluir))
+      .thenReturn(Arrays.asList());
+    when(this.generoRepository.findById(1))
+      .thenReturn(Optional.of(generoAExcluir));
+    this.generoService.excluir(1);
+    verify(this.generoRepository,times(1)).deleteById(generoAExcluir.getId());
   }
 
   private Genero criarNovoGenero(Integer id, String nome) {
@@ -104,8 +114,10 @@ public class GeneroServiceTest {
   }
 
   private List<Genero> listarGenerosExistentes() {
-    return Arrays.asList(new Genero(1, "Terror"), new Genero(2, "Comedia"),
+    return Arrays.asList(
+        new Genero(1, "Terror"), 
+        new Genero(2, "Comedia"),
         new Genero(3, "Aventura"));
   }
-
+  
 }
