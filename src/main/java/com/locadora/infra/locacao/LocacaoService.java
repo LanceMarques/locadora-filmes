@@ -70,7 +70,9 @@ public class LocacaoService {
    */
   public List<Locacao> listarPorCPF(String cpf) {
     final Cliente clienteSalvo = this.clienteService.buscarClientePorCpf(cpf);
-    final List<Locacao> locacoes = this.listarPendenciasDoCliente(clienteSalvo);
+    //final List<Locacao> locacoes = this.listarPendenciasDoCliente(clienteSalvo);
+    final List<Locacao> locacoes = this.locacaoRepository.findByClienteAndStatus(clienteSalvo, StatusLocacao.ABERTO);
+    
     return locacoes;
   }
 
@@ -214,9 +216,10 @@ public class LocacaoService {
    *         pesquisa
    */
   private List<Locacao> listarPendenciasDoCliente(Cliente clienteSalvo) {
-    final List<Locacao> locacoes = this.locacaoRepository.findByCliente(clienteSalvo);
-    locacoes.removeIf(locacao -> locacao.getStatus() == StatusLocacao.FINALIZADO);
-    return locacoes;
+    //final List<Locacao> locacoes = this.locacaoRepository.findByCliente(clienteSalvo);
+  //  locacoes.removeIf(locacao -> locacao.getStatus() == StatusLocacao.FINALIZADO);
+   // return locacoes;
+    return null;
   }
 
   /**

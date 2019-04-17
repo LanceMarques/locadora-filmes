@@ -29,25 +29,6 @@ public class LocacaoTemFilmeService {
 	}
 
 	/**
-	 * Metodo responsavel por calcular o valor total da diaria de cada filme
-	 * presente em uma Locacao.
-	 * 
-	 * @param filmes {@link List} Lista de {@link LocacaoTemFilme filmes} locados.
-	 */
-	public void calculaTotalDiaria(List<LocacaoTemFilme> filmes) {
-		Filme filmeSalvo;
-		Double valorTotalDiaria;
-		for (LocacaoTemFilme filmeLocado : filmes) {
-			Integer quantidade = filmeLocado.getQuantidadeLocada();
-			Integer filmeId = filmeLocado.getFilme().getId();
-			filmeSalvo = filmeService.buscarPorId(filmeId);
-			valorTotalDiaria = quantidade * filmeSalvo.getValorDiaria();
-
-			filmeLocado.setValorTotalDaDiaria(valorTotalDiaria);
-		}
-	}
-
-	/**
 	 * Metodo responsavel por gerar o id composto de cada {@link LocacaoTemFilme
 	 * filme} locado, instanciando cada filme com a locacao recebida como parametro.
 	 * 
@@ -64,15 +45,15 @@ public class LocacaoTemFilmeService {
 		final List<LocacaoTemFilme> filmes = new ArrayList<>();
 		final List<Filme> filmesDasLocacoes = new ArrayList<>();
 
-		int qtdEstoque;
+		int qtdLocada;
 		Filme filmeDaLocacao;
 
 		for (LocacaoTemFilme filmeLocado : filmesLocados) {
 
-			qtdEstoque = filmeLocado.getQuantidadeLocada();
+			qtdLocada = filmeLocado.getQuantidadeLocada();
 			filmeDaLocacao = filmeLocado.getFilme();
 
-			filmeLocado = new LocacaoTemFilme(locacao, filmeDaLocacao, qtdEstoque);
+			filmeLocado = new LocacaoTemFilme(locacao, filmeDaLocacao, qtdLocada);
 			filmeLocado.setValorTotalDaDiaria(this.calcularValorTotalDiaria(filmeLocado));
 
 			filmesDasLocacoes.add(filmeLocado.getFilme());
@@ -108,7 +89,7 @@ public class LocacaoTemFilmeService {
 			filmeSalvo = this.filmeService.buscarReduzirEstoque(filmeId, qtdLocada);
 
 			filmeLocado.setFilme(filmeSalvo);
-			filmeLocado.setValorTotalDaDiaria(calcularValorTotalDiaria(filmeLocado));
+			//filmeLocado.setValorTotalDaDiaria(calcularValorTotalDiaria(filmeLocado));
 
 			filmes.add(filmeLocado);
 		}

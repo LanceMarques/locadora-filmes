@@ -7,7 +7,7 @@ import com.locadora.infra.enums.StatusLocacao;
 
 public interface LocacaoRepository extends JpaRepository<Locacao, Integer>, LocacaoRepositoryQuery{
 
-  List<Locacao> findByCliente(Cliente cliente);
+  List<Locacao> findByClienteAndStatus(Cliente cliente,StatusLocacao status);
   List<Locacao> findByStatus(StatusLocacao status);
   
 }
