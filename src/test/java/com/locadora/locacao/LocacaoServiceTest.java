@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,6 @@ import com.locadora.infra.locacao.LocacaoRepository;
 import com.locadora.infra.locacao.LocacaoService;
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilme;
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilmeService;
-import com.locadora.utils.DataUtils;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LocacaoServiceTest {
@@ -149,16 +149,38 @@ public class LocacaoServiceTest {
     
     this.locacaoService.devolverLocacao(locacaoDevolvida.getId());
     
-    verify(this.locacaoRepository,times(1)).save(locacaoDevolvida);    
+    
+    verify(this.locacaoRepository,times(1)).save(locacaoDevolvida);   
   }
 
   @Test
   public void testCalcularValorTotal() {
     
+    List<LocacaoTemFilme> filmes = Arrays.asList(
+          new LocacaoTemFilme(new Locacao(), new Filme(), null, 10.0),
+          new LocacaoTemFilme(new Locacao(), new Filme(), null, 5.0)
+        );
+    
+    @SuppressWarnings("deprecation")
+    final Locacao locacao = new Locacao(1, new Date(2019, 04, 01), new Date(2019, 04, 05), null, null, null, filmes);
+    
+    Double valorTotal = this.locacaoService.calcularValorTotal(locacao);
+    
+    assertThat(valorTotal, equalTo(75.0));
   }
 
   @Test
   public void testExcluir() {
+    
+    Locacao locacaoAExcluir = this.criarLocacaoValida();
+    
+    when(this.locacaoRepository.findById(1))
+      .thenReturn(Optional.of(locacaoAExcluir));
+     
+    this.locacaoService.excluir(locacaoAExcluir.getId());
+    
+    verify(this.locacaoTemFilmeService,times(1)).devolverAoEstoque(locacaoAExcluir.getFilmes());
+    verify(this.locacaoRepository,times(1)).deleteById(locacaoAExcluir.getId());
     
   }
 
@@ -187,7 +209,7 @@ public class LocacaoServiceTest {
     filmesLocados.get(0).setValorTotalDaDiaria(10.0);
     filmesLocados.get(1).setValorTotalDaDiaria(10.0);    
     
-    return new Locacao(1, null, null, null, null, cliente, filmesLocados);
+    return new Locacao(1, new Date(System.currentTimeMillis()), null, null, null, cliente, filmesLocados);
   }
    
 }

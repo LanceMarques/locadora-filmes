@@ -10,6 +10,8 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import org.hamcrest.core.IsEqual;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.locadora.infra.filme.Filme;
 import com.locadora.infra.filme.FilmeRepository;
 import com.locadora.infra.filme.FilmeService;
+import com.locadora.infra.filme.exceptions.FilmeEstoqueIndisponivelException;
+import com.locadora.infra.filme.exceptions.FilmeNaoEncontradoException;
 import com.locadora.infra.genero.Genero;
 import com.locadora.infra.genero.GeneroService;
 import com.locadora.infra.locacaoTemFilme.LocacaoTemFilmeService;
@@ -49,7 +53,17 @@ public class filmeServiceTest {
   }
 
   @Test
-  public void testListarPorGenero() {}
+  public void testListarPorGenero() {
+    Filme filmeExistente = this.criarNovoFilme(1, "matrix", 90, 10, "Neo", "Washolski", 8.0, new Genero(1,"Terror"));
+    
+    when(this.filmeRepository.findByGenero(filmeExistente.getGenero()))
+      .thenReturn(Arrays.asList(filmeExistente));
+    
+    List<Filme> filmes = this.filmeService.listarPorGenero(filmeExistente.getGenero());
+    
+    assertThat(filmes, hasSize(1));
+    
+  }
 
   @Test
   public void testBuscarPorId() {
@@ -63,15 +77,46 @@ public class filmeServiceTest {
   }
 
   @Test
+  public void testBuscarPorId_FilmeNaoEncontradoException() {
+    Filme filmeBuscado = null;
+    
+    when(this.filmeRepository.findById(1)).thenReturn(Optional.ofNullable(null));
+
+    try {
+      filmeBuscado = this.filmeService.buscarPorId(1);  
+    } catch (Exception e) {
+      assertThat(e, IsInstanceOf.instanceOf(FilmeNaoEncontradoException.class));
+    }
+    assertThat(filmeBuscado, equalTo(null));
+  }
+
+  
+  @Test
   public void testBuscarPorIdComEstoqueDisponivel() {
     final Integer qtdLocada = 5;
-    final Filme filmeModelo = this.criarNovoFilme(1, "matrix", 90, 10, "Neo", "Washolski", 8.0, new Genero(1,"Terror"));
+    final Filme filmeLocado = this.criarNovoFilme(1, "matrix", 90, 10, "Neo", "Washolski", 8.0, new Genero(1,"Terror"));
     
-    when(this.filmeRepository.findById(1)).thenReturn(Optional.of(filmeModelo));
+    when(this.filmeRepository.findById(1)).thenReturn(Optional.of(filmeLocado));
     Filme filmeBuscado = this.filmeService.buscarPorIdComEstoqueDisponivel(1, qtdLocada);
     assertThat(filmeBuscado.getQuantidadeEstoque(), greaterThanOrEqualTo(qtdLocada));
   }
 
+  @Test
+  public void testBuscarPorIdComEstoqueDisponivel_FilmeEstoqueIndisponivelException() {
+    final Integer qtdLocada = 5;
+    final Filme filmeLocado = this.criarNovoFilme(1, "matrix", 90, 4, "Neo", "Washolski", 8.0, new Genero(1,"Terror"));
+    final Filme filmeBuscado;
+    
+    when(this.filmeRepository.findById(1)).thenReturn(Optional.of(filmeLocado));
+    
+      try {
+        filmeBuscado = this.filmeService.buscarPorIdComEstoqueDisponivel(1, qtdLocada); 
+      } catch (Exception e) {
+        assertThat(e, IsInstanceOf.instanceOf(FilmeEstoqueIndisponivelException.class));
+      }
+    assertThat(filmeBuscado,em);
+  }
+  
   @Test
   public void testBuscarReduzirEstoque() {
     final Integer qtdLocada = 5;

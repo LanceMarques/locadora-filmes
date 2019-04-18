@@ -70,9 +70,10 @@ public class LocacaoService {
    */
   public List<Locacao> listarPorCPF(String cpf) {
     final Cliente clienteSalvo = this.clienteService.buscarClientePorCpf(cpf);
-    //final List<Locacao> locacoes = this.listarPendenciasDoCliente(clienteSalvo);
-    final List<Locacao> locacoes = this.locacaoRepository.findByClienteAndStatus(clienteSalvo, StatusLocacao.ABERTO);
-    
+    // final List<Locacao> locacoes = this.listarPendenciasDoCliente(clienteSalvo);
+    final List<Locacao> locacoes =
+        this.locacaoRepository.findByClienteAndStatus(clienteSalvo, StatusLocacao.ABERTO);
+
     return locacoes;
   }
 
@@ -134,26 +135,6 @@ public class LocacaoService {
   }
 
   /**
-   * Metodo responsavel por calcular o valor total de uma {@link Locacao locacao} recebida como
-   * parametro
-   * 
-   * @param locacao {@link Locacao} Dados da locacao para o calculo do valor total.
-   * @return valorTotal Valor total calculado.
-   * @since 1.0.0
-   */
-  public Double calcularValorTotal(Locacao locacao) {
-    final Long intervaloMilis =
-        locacao.getDataDevolucao().getTime() - locacao.getDataRealizacao().getTime();
-    final Long intervaloDias = 1 + intervaloMilis / (1000 * 60 * 60 * 24);
-    double diariasDosFilmes = 0;
-    for (LocacaoTemFilme locacaoTemfilme : locacao.getFilmes()) {
-      diariasDosFilmes += locacaoTemfilme.getValorTotalDaDiaria();
-    }
-    final Double valorTotal = diariasDosFilmes * intervaloDias;
-    return valorTotal;
-  }
-
-  /**
    * Metodo responsavel por excluir uma {@link Locacao locacao} que possui o id informado.
    * 
    * @param id ({@link Integer}) Id da Locacao a ser excluida.
@@ -175,7 +156,7 @@ public class LocacaoService {
    */
   private Locacao locarFilmes(Locacao locacao) {
 
-	Locacao locacaoRealizada = locacao;
+    Locacao locacaoRealizada = locacao;
     List<LocacaoTemFilme> filmesLocados =
         this.locacaoTemFilmeService.verificaFilmes(locacaoRealizada.getFilmes());
     final Cliente clienteValido = buscarClienteValido(locacaoRealizada);
@@ -204,6 +185,8 @@ public class LocacaoService {
    */
   private void devolverFilmes(Locacao locacaoDevolvida) {
     final List<LocacaoTemFilme> filmesDevolvidos = locacaoDevolvida.getFilmes();
+    System.out.println(filmesDevolvidos.get(0).getFilme().getTitulo());
+    System.out.println(filmesDevolvidos.get(1).getFilme().getTitulo());
     this.locacaoTemFilmeService.devolverAoEstoque(filmesDevolvidos);
   }
 
@@ -216,16 +199,17 @@ public class LocacaoService {
    *         pesquisa
    */
   private List<Locacao> listarPendenciasDoCliente(Cliente clienteSalvo) {
-    //final List<Locacao> locacoes = this.locacaoRepository.findByCliente(clienteSalvo);
-  //  locacoes.removeIf(locacao -> locacao.getStatus() == StatusLocacao.FINALIZADO);
-   // return locacoes;
+    // final List<Locacao> locacoes = this.locacaoRepository.findByCliente(clienteSalvo);
+    // locacoes.removeIf(locacao -> locacao.getStatus() == StatusLocacao.FINALIZADO);
+    // return locacoes;
     return null;
   }
 
   /**
-   * Metodo responsavel por verificar se o cliente da locacao atual ainda nao atingiu o limite de filmes permitido.
+   * Metodo responsavel por verificar se o cliente da locacao atual ainda nao atingiu o limite de
+   * filmes permitido.
    * 
-   * @param locacao {@link Locacao} Locacao a ser validada. 
+   * @param locacao {@link Locacao} Locacao a ser validada.
    * @return clienteSalvo {@link Cliente} Cliente valido.
    */
   private Cliente buscarClienteValido(Locacao locacao) {
@@ -244,6 +228,26 @@ public class LocacaoService {
       throw new LocacaoLimiteDeFilmesException();
     }
     return clienteSalvo;
+  }
+
+  /**
+   * Metodo responsavel por calcular o valor total de uma {@link Locacao locacao} recebida como
+   * parametro
+   * 
+   * @param locacao {@link Locacao} Dados da locacao para o calculo do valor total.
+   * @return valorTotal Valor total calculado.
+   * @since 1.0.0
+   */
+  public Double calcularValorTotal(Locacao locacao) {
+    final Long intervaloMilis =
+        locacao.getDataDevolucao().getTime() - locacao.getDataRealizacao().getTime();
+    final Long intervaloDias = 1 + intervaloMilis / (1000 * 60 * 60 * 24);
+    double diariasDosFilmes = 0;
+    for (LocacaoTemFilme locacaoTemfilme : locacao.getFilmes()) {
+      diariasDosFilmes += locacaoTemfilme.getValorTotalDaDiaria();
+    }
+    final Double valorTotal = diariasDosFilmes * intervaloDias;
+    return valorTotal;
   }
 
 }

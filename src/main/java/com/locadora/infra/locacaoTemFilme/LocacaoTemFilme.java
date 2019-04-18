@@ -61,6 +61,13 @@ public class LocacaoTemFilme {
     setId(new LocacaoTemFilmeId(locacao.getId(), filme.getId()));
   }
 
+  public LocacaoTemFilme(Locacao locacao, Filme filme, Integer quantidadeLocada, double valorTotalDaDiaria) {
+    setLocacao(locacao);
+    setFilme(filme);
+    setQuantidadeLocada(quantidadeLocada);
+    setValorTotalDaDiaria(valorTotalDaDiaria);
+    setId(new LocacaoTemFilmeId(locacao.getId(), filme.getId()));
+  }
 
   public LocacaoTemFilmeId getId() {
     return id;
