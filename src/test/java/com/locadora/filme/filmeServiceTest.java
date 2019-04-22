@@ -1,6 +1,7 @@
 package com.locadora.filme;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsInstanceOf;
+import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +49,7 @@ public class filmeServiceTest {
 
   @Test
   public void testListarTodos() {
-    when(this.filmeRepository.findAll()).thenReturn(this.listarFilmesExistentes());
+    when(this.filmeRepository.findAll()).thenReturn(this.criarListaDeFilmes());
     List<Filme> filmes = filmeService.listarTodos();
     assertThat(filmes, hasSize(3));
   }
@@ -114,7 +116,6 @@ public class filmeServiceTest {
       } catch (Exception e) {
         assertThat(e, IsInstanceOf.instanceOf(FilmeEstoqueIndisponivelException.class));
       }
-    assertThat(filmeBuscado,em);
   }
   
   @Test
@@ -166,7 +167,9 @@ public class filmeServiceTest {
 
   @Test
   public void testSalvarTodos() {
-
+    final List<Filme> filmes = this.criarListaDeFilmes();
+    this.filmeService.salvarTodos(filmes);
+    verify(this.filmeRepository,times(1)).saveAll(filmes);
   }
 
   @Test
@@ -200,7 +203,7 @@ public class filmeServiceTest {
 
   }
 
-  private List<Filme> listarFilmesExistentes() {
+  private List<Filme> criarListaDeFilmes() {
     Genero acao = new Genero(1, "acao");
     Genero ficcao = new Genero(2, "ficcao");
     Genero aventura = new Genero(3, "aventura");

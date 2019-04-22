@@ -3,6 +3,8 @@ package com.locadora.locacaoTemFilme;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
@@ -64,26 +66,45 @@ public class LocacaoTemFilmeServiceTest {
   }
 
   @Test
+  public void testVerificaFilmes() {
+    List<LocacaoTemFilme> filmesLocados = this.criarListaLocacaoTemFilme();
+
+    this.locacaoTemFilmeService.verificaFilmes(filmesLocados);
+
+    verify(this.filmeService, times(2)).buscarReduzirEstoque(1, 2);
+    verify(this.filmeService, times(1)).buscarReduzirEstoque(1, 1);
+  }
+
+  @Test
+  public void testDevolverAoEstoque() {
+
+    List<LocacaoTemFilme> filmesLocados = this.criarListaLocacaoTemFilme();
+
+    this.locacaoTemFilmeService.devolverAoEstoque(filmesLocados);
+
+    verify(this.filmeService, times(2)).buscarAcrescentarEstoque(1, 2);
+    verify(this.filmeService, times(1)).buscarAcrescentarEstoque(1, 1);
+  }
+
+  @Test
   public void testContarFilmesNasLocacoes() {
     List<Locacao> locacoes = Arrays
-        .asList(
-              new Locacao(1, null, null, null, null, null, this.criarListaLocacaoTemFilme())
-            );
+        .asList(new Locacao(1, null, null, null, null, null, this.criarListaLocacaoTemFilme()));
     Integer totalFilmes = this.locacaoTemFilmeService.contarFilmesNasLocacoes(locacoes);
-    
-    assertThat(totalFilmes,equalTo(5));
-    
+
+    assertThat(totalFilmes, equalTo(5));
+
   }
 
   @Test
   public void testContarFilmes() {
 
     List<LocacaoTemFilme> filmesLocados = this.criarListaLocacaoTemFilme();
-    
+
     Integer totalFilmes = this.locacaoTemFilmeService.contarFilmes(filmesLocados);
-    
-    assertThat(totalFilmes,equalTo(5));
-    
+
+    assertThat(totalFilmes, equalTo(5));
+
   }
 
   private List<LocacaoTemFilme> criarListaLocacaoTemFilme() {

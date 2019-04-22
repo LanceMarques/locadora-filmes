@@ -35,7 +35,8 @@ public class GeneroController {
   private ApplicationEventPublisher publisher;
 
   /**
-   * Metodo responsavel por fornecer uma lista com todos os {@link Genero generos} cadastrados no sistema
+   * Metodo responsavel por fornecer uma lista com todos os {@link Genero generos} cadastrados no
+   * sistema
    * 
    * @return {@link ResponseEntity} com todos os {@link Genero generos} cadastrados
    */
@@ -71,13 +72,13 @@ public class GeneroController {
   public ResponseEntity<Genero> criar(@Valid @RequestBody Genero genero,
       HttpServletResponse response) {
     final Genero generoSalvo = this.generoService.criar(genero);
-    this.publisher.publishEvent(new RecursoCriadoEvent(this, response, generoSalvo.getId()));
+    // this.publisher.publishEvent(new RecursoCriadoEvent(this, response, generoSalvo.getId()));
     return ResponseEntity.status(HttpStatus.CREATED).body(generoSalvo);
   }
 
   /**
-   * Metodo responsavel por atualizar um {@link Genero genero} que possui o id recebido no path
-   * com os dados recebidos no corpo da requisicao.
+   * Metodo responsavel por atualizar um {@link Genero genero} que possui o id recebido no path com
+   * os dados recebidos no corpo da requisicao.
    * 
    * @param id ({@link Integer}) Id do genero a ser atualizado.
    * @param genero {@link Genero} Dados a serem atualizados.
@@ -96,7 +97,7 @@ public class GeneroController {
   /**
    * Metodo responsavel por excluir um {@link Genero genero} que possui o id informado.
    * 
-   * @param id ({@link Integer}) Id do genero a ser excluido. 
+   * @param id ({@link Integer}) Id do genero a ser excluido.
    * @return {@link ResponseEntity} sem conteudo.
    * 
    * @since 1.0.0

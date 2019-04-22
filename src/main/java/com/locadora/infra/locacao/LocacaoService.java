@@ -143,7 +143,7 @@ public class LocacaoService {
    */
   public void excluir(Integer id) {
     final Locacao locacaoSalva = this.buscarPorId(id);
-    devolverFilmes(locacaoSalva);
+    this.devolverFilmes(locacaoSalva);
     this.locacaoRepository.deleteById(locacaoSalva.getId());
   }
 
@@ -185,8 +185,6 @@ public class LocacaoService {
    */
   private void devolverFilmes(Locacao locacaoDevolvida) {
     final List<LocacaoTemFilme> filmesDevolvidos = locacaoDevolvida.getFilmes();
-    System.out.println(filmesDevolvidos.get(0).getFilme().getTitulo());
-    System.out.println(filmesDevolvidos.get(1).getFilme().getTitulo());
     this.locacaoTemFilmeService.devolverAoEstoque(filmesDevolvidos);
   }
 
@@ -212,14 +210,14 @@ public class LocacaoService {
    * @param locacao {@link Locacao} Locacao a ser validada.
    * @return clienteSalvo {@link Cliente} Cliente valido.
    */
-  private Cliente buscarClienteValido(Locacao locacao) {
+  public Cliente buscarClienteValido(Locacao locacao) {
     final Integer clienteId = locacao.getCliente().getId();
 
     final Integer filmesNaLocacao;
     final Integer filmesComCliente;
 
     final Cliente clienteSalvo = clienteService.buscarPorId(clienteId);
-    final List<Locacao> locacoesDoCliente = this.listarPendenciasDoCliente(clienteSalvo);
+    final List<Locacao> locacoesDoCliente = this.locacaoRepository.findByClienteAndStatus(clienteSalvo, StatusLocacao.ABERTO);
 
     filmesNaLocacao = locacaoTemFilmeService.contarFilmes(locacao.getFilmes());
     filmesComCliente = locacaoTemFilmeService.contarFilmesNasLocacoes(locacoesDoCliente);

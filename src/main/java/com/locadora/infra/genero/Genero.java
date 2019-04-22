@@ -31,11 +31,9 @@ public class Genero {
   private String nome;
 
   public Genero() {
-    super();
   }
 
   public Genero(Integer id, String nome) {
-    super();
     this.setId(id);
     this.setNome(nome);
   }

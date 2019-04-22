@@ -144,7 +144,7 @@ public class ClienteService {
 	 * 
 	 * @since 1.0.0
 	 */
-	private String formatarCpf(String cpf) {
+	public String formatarCpf(String cpf) {
 		final String cpfFormatado;
 		if (cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}")) {
 			cpfFormatado = cpf;
