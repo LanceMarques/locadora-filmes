@@ -41,6 +41,7 @@ public class LocacaoService {
    * @return Lista com todas as {@link Locacao locacoes} encontradas na pesquisa
    */
   public List<Locacao> pesquisar(LocacaoFilter filter) {
+    System.out.println("##################AQUI");
     return this.locacaoRepository.filtrar(filter);
   }
 
@@ -196,12 +197,13 @@ public class LocacaoService {
    * @return locacoes {@link Locacao} Lista com todas as {@link Locacao locacoes} encontradas na
    *         pesquisa
    */
-  private List<Locacao> listarPendenciasDoCliente(Cliente clienteSalvo) {
+  
+  //private List<Locacao> listarPendenciasDoCliente(Cliente clienteSalvo) {
     // final List<Locacao> locacoes = this.locacaoRepository.findByCliente(clienteSalvo);
     // locacoes.removeIf(locacao -> locacao.getStatus() == StatusLocacao.FINALIZADO);
     // return locacoes;
-    return null;
-  }
+    //return null;
+  //}
 
   /**
    * Metodo responsavel por verificar se o cliente da locacao atual ainda nao atingiu o limite de

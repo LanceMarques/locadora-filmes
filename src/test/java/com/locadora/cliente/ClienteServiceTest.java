@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -63,7 +62,7 @@ public class ClienteServiceTest {
     when(this.clienteRepository.findById(1)).thenReturn(Optional.ofNullable(null));
 
     try {
-      final Cliente clienteBuscado = this.clienteService.buscarPorId(1);
+      this.clienteService.buscarPorId(1);
     } catch (Exception e) {
       assertThat(e, instanceOf(ClienteNaoEncontradoException.class));
     }
@@ -100,15 +99,13 @@ public class ClienteServiceTest {
 
   @Test
   public void testBuscarClientePorCpf_ClienteNaoEncontradoException() {
-
     when(this.clienteRepository.findByCpf("957.101.910-00")).thenReturn(Optional.ofNullable(null));
 
     try {
-      final Cliente clienteBuscado = this.clienteService.buscarClientePorCpf("957.101.910-00");
+      this.clienteService.buscarClientePorCpf("957.101.910-00");
     } catch (Exception e) {
       assertThat(e, instanceOf(ClienteNaoEncontradoException.class));
     }
-
   }
 
   @Test
@@ -174,7 +171,6 @@ public class ClienteServiceTest {
         .thenReturn(Optional.of(clienteMesmoCpf));
 
     try {
-      Cliente clienteAtualizado =
           this.clienteService.atualizar(clienteAAtualizar.getId(), clienteAAtualizar);
 
     } catch (Exception e) {

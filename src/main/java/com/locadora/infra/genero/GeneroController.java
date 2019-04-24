@@ -72,7 +72,7 @@ public class GeneroController {
   public ResponseEntity<Genero> criar(@Valid @RequestBody Genero genero,
       HttpServletResponse response) {
     final Genero generoSalvo = this.generoService.criar(genero);
-    // this.publisher.publishEvent(new RecursoCriadoEvent(this, response, generoSalvo.getId()));
+    this.publisher.publishEvent(new RecursoCriadoEvent(this, response, generoSalvo.getId()));
     return ResponseEntity.status(HttpStatus.CREATED).body(generoSalvo);
   }
 

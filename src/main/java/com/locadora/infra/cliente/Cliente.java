@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Classe responsavel por modelar e mapear os atributos da entidade Cliente
@@ -85,6 +86,27 @@ public class Cliente {
 		this.endereco = endereco;
 	}
 
+	@JsonIgnore
+	public String getJson() {
+	  
+	  //new Cliente(id, cpf, nome, endereco)
+	  
+	  String json = "{"
+	      + "\"id\":"+this.getId()
+	      + ",\"cpf\":"+this.addAspas(this.getCpf())
+	      + ",\"nome\":"+this.addAspas(this.getNome())
+	      + ",\"endereco\":"+this.getEndereco().getJson()
+	      + "}";
+	  
+	  return json;
+	  
+	}
+	
+	@JsonIgnore
+	private String addAspas(String atributo) {
+	  return "\""+atributo+"\"";
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

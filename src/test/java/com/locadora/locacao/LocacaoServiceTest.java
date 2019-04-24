@@ -73,7 +73,7 @@ public class LocacaoServiceTest {
     when(this.locacaoRepository.findById(1)).thenReturn(Optional.ofNullable(null));
 
     try {
-      Locacao locacaoBuscada = this.locacaoService.buscarPorId(1);
+      this.locacaoService.buscarPorId(1);
     } catch (Exception e) {
       assertThat(e, instanceOf(LocacaoNaoEncontradaException.class));
     }

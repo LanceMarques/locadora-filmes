@@ -62,6 +62,7 @@ public class ClienteController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Cliente> buscarPorId(@PathVariable("id") Integer id) {
 		final Cliente cliente = this.clienteService.buscarPorId(id);
+		System.out.println("######################################"+cliente.getNome());
 		return ResponseEntity.status(HttpStatus.OK).body(cliente);
 
 	}

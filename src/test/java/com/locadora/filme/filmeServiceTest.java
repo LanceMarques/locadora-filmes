@@ -1,7 +1,6 @@
 package com.locadora.filme;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
@@ -11,9 +10,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsInstanceOf;
-import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -107,12 +104,11 @@ public class filmeServiceTest {
   public void testBuscarPorIdComEstoqueDisponivel_FilmeEstoqueIndisponivelException() {
     final Integer qtdLocada = 5;
     final Filme filmeLocado = this.criarNovoFilme(1, "matrix", 90, 4, "Neo", "Washolski", 8.0, new Genero(1,"Terror"));
-    final Filme filmeBuscado;
     
     when(this.filmeRepository.findById(1)).thenReturn(Optional.of(filmeLocado));
     
       try {
-        filmeBuscado = this.filmeService.buscarPorIdComEstoqueDisponivel(1, qtdLocada); 
+        this.filmeService.buscarPorIdComEstoqueDisponivel(1, qtdLocada); 
       } catch (Exception e) {
         assertThat(e, IsInstanceOf.instanceOf(FilmeEstoqueIndisponivelException.class));
       }

@@ -119,9 +119,9 @@ public class LocacaoController {
    * @since 1.0.0
    */
   @PutMapping("/{id}")
-  public ResponseEntity<Locacao> atualizar(@PathVariable Integer id, @RequestBody Locacao locacao) {
-    Locacao locacaoAtualizada = this.locacaoService.atualizar(id, locacao);
-    return ResponseEntity.status(HttpStatus.OK).body(locacaoAtualizada);
+  public ResponseEntity<?> atualizar(@PathVariable Integer id, @RequestBody Locacao locacao) {
+    this.locacaoService.atualizar(id, locacao);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
   }
 
   /**
