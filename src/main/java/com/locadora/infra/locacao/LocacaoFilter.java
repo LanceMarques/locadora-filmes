@@ -12,7 +12,19 @@ public class LocacaoFilter {
   private Date dataDevolucaoAte;
   
   private StatusLocacao statusLocacao;
-  
+    
+  public LocacaoFilter() {
+    super();
+  }
+  public LocacaoFilter(Date dataRealizacaoDe, Date dataRealizacaoAte, Date dataDevolucaoDe,
+      Date dataDevolucaoAte, StatusLocacao statusLocacao) {
+    super();
+    this.dataRealizacaoDe = dataRealizacaoDe;
+    this.dataRealizacaoAte = dataRealizacaoAte;
+    this.dataDevolucaoDe = dataDevolucaoDe;
+    this.dataDevolucaoAte = dataDevolucaoAte;
+    this.statusLocacao = statusLocacao;
+  }
   public Date getDataRealizacaoDe() {
     return dataRealizacaoDe;
   }
