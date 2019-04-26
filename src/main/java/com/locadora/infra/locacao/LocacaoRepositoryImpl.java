@@ -17,12 +17,12 @@ public class LocacaoRepositoryImpl implements LocacaoRepositoryQuery {
 
   @Override
   public List<Locacao> filtrar(LocacaoFilter locacaoFilter) {
-
+    
     CriteriaBuilder builder = manager.getCriteriaBuilder();
     CriteriaQuery<Locacao> criteria = builder.createQuery(Locacao.class);
-
+   
     Root<Locacao> root = criteria.from(Locacao.class);
-
+    
     Predicate[] predicates = criarRestricoes(locacaoFilter, builder, root);
     criteria.where(predicates);
 
@@ -47,12 +47,12 @@ public class LocacaoRepositoryImpl implements LocacaoRepositoryQuery {
     }
     if(locacaoFilter.getDataDevolucaoDe()!=null) {
       predicates.add(
-        builder.greaterThan(root.get("dataDevolucao"), locacaoFilter.getDataDevolucaoDe())
+        builder.greaterThanOrEqualTo(root.get("dataDevolucao"), locacaoFilter.getDataDevolucaoDe())
       );
     }
     if(locacaoFilter.getDataDevolucaoAte()!=null) {
       predicates.add(
-        builder.lessThan(root.get("dataDevolucao"), locacaoFilter.getDataDevolucaoAte())
+        builder.lessThanOrEqualTo(root.get("dataDevolucao"), locacaoFilter.getDataDevolucaoAte())
       );
     }
     if(locacaoFilter.getStatusLocacao()!=null) {
